@@ -1,1 +1,2 @@
 xterm*metaSendsEscape: true
+XTerm*on2Clicks: regex [^  \n]+
