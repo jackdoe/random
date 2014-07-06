@@ -4,10 +4,11 @@
   "length of a region"
   (interactive)
   (message (format "%d" (- (region-end) (region-beginning)))))
-
+(setq ispell-program-name "/usr/local/bin/ispell")
 (setq ring-bell-function 'ignore)
-; (set-face-attribute 'default nil :font "Liberation Mono-10")
-(cua-mode 1)
+;; (set-face-attribute 'default nil :font "Liberation Mono-10")
+;; (cua-mode 1)
+(cua-mode 0)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -19,12 +20,16 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 (load-file "~/.emacs.d/lisp/go-mode.el")
 (set-face-attribute 'default nil :height 110)
+(global-set-key [(control h)] 'delete-backward-char)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "e890fd7b5137356ef5b88be1350acf94af90d9d6dd5c234978cd59a6b873ea94" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default))))
+ '(custom-safe-themes
+   (quote
+    ("1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "e890fd7b5137356ef5b88be1350acf94af90d9d6dd5c234978cd59a6b873ea94" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+ '(tramp-use-ssh-controlmaster-options nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -52,6 +57,12 @@
            (substring host-name 0 (match-beginning 1))
          host-name)))
    ": %12b"))
+
+(global-set-key [(control ?+)] 'text-scale-increase)
+(global-set-key [(control ?=)] 'text-scale-increase)
+(global-set-key [(control ?-)] 'text-scale-decrease)
+(global-set-key [(control ?_)] 'text-scale-decrease)
+(global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
 
 (setq-default
  mode-line-buffer-identification
@@ -140,10 +151,32 @@
 ;; Activate hidden-mode-line-mode
 ;; (hidden-mode-line-mode 1)
 
-
-
 ;;(setq url-proxy-services
 ;;   '(("no_proxy" . "^\\(localhost\\|10.*\\)")
 ;;     ("http" . "proxy.com:8080")
 ;;     ("https" . "proxy.com:8080")))
 
+;; (setq mac-option-key-is-meta nil)
+;; (setq mac-command-key-is-meta t)
+;; (setq mac-command-modifier 'meta)
+;; (setq mac-option-modifier nil
+(defun my-mark-word (N)
+  (interactive "p")
+  (if (and 
+       (not (eq last-command this-command))
+       (not (eq last-command 'my-mark-word-backward)))
+      (set-mark (point)))
+  (forward-word N))
+
+
+(defun my-mark-word-backward (N)
+  (interactive "p")
+  (if (and
+       (not (eq last-command this-command))
+       (not (eq last-command 'my-mark-word)))
+      (set-mark (point)))
+  (backward-word N))
+
+(local-set-key (kbd "M-k") 'my-mark-word)
+
+(local-set-key (kbd "M-j") 'my-mark-word-backward)
