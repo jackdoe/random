@@ -1,0 +1,17 @@
+<script src="ijs.js"></script>
+<script>
+
+var index = new Index;
+index.bulk_index('id_0',["jack jack"]);
+index.bulk_index('id_1',["asdas"]);
+index.bulk_index('id_2',["jack doe"]);
+
+index.search(new BoolShouldQuery().add(index.term_query("ja")).add(index.term_query("jac")),function(id,score) {
+    console.log("id: " + id + " score: " + score);
+},3);
+
+index.search(index.match_query("jack"),function(id,score) {
+    console.log("id: " + id + " score: " + score);
+},3);
+
+</script>
