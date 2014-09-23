@@ -1,13 +1,13 @@
 (require 'tramp)
     (setq tramp-default-method "ssh")
+(put 'temporary-file-directory 'standard-value '((file-name-as-directory "/tmp")))
+
 (defun region-length ()
   "length of a region"
   (interactive)
   (message (format "%d" (- (region-end) (region-beginning)))))
 (setq ispell-program-name "/usr/local/bin/ispell")
 (setq ring-bell-function 'ignore)
-;; (set-face-attribute 'default nil :font "Liberation Mono-10")
-;; (cua-mode 1)
 (cua-mode 0)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -17,7 +17,7 @@
 (blink-cursor-mode 0)
 (load-theme 'tango t)
 (add-to-list 'load-path "~/.emacs.d/lisp/")
-(set-face-attribute 'default nil :height 150)
+(set-face-attribute 'default nil :height 160)
 (global-set-key [(control h)] 'delete-backward-char)
 (defun dos2unix ()
   "Replace DOS eolns CR LF with Unix eolns CR"
