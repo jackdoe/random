@@ -4,9 +4,9 @@
 var index = new Index;
 index.bulk_index('id_0',["jack jack"]);
 index.bulk_index('id_1',["asdas"]);
-index.bulk_index('id_2',["jack doe"]);
+index.bulk_index('id_2',["jack doe асд"]);
 
-index.search(new BoolShouldQuery().add(index.term_query("ja")).add(index.term_query("jac")),function(id,score) {
+index.search(new BoolShouldQuery().add(index.term_query("ас")).add(index.term_query("jac")),function(id,score) {
     console.log("id: " + id + " score: " + score);
 },3);
 

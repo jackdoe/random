@@ -3,6 +3,8 @@
     function Index() {
         var inverted = {};
         var forward = [];
+        var tokenizer_re = new RegExp('[ \n\r?!.,_-]+');
+
         this._ngram = function(s,min,max,fx) {
             var chars = s.split('');
             for (var pos = 0; pos < chars.length; pos++) {
@@ -11,6 +13,7 @@
                     for (var i = current.length; i < n && i + pos < chars.length; i++) {
                         current += chars[i + pos];
                     }
+
                     if (current.length === n) {
                         fx(current);
                     }
@@ -19,7 +22,7 @@
         };
 
         this._tokenize = function(s,fx) {
-            var splitted = s.toLowerCase().split(/[^\w]+/)
+            var splitted = s.toLowerCase().split(tokenizer_re)
             for (var i = 0; i < splitted.length; i++) {
                 if (splitted[i].length > 0)
                     fx(splitted[i]);
@@ -52,7 +55,7 @@
                     var v = 0;
                     if (gram in uniq)
                         v = uniq[gram];
-                    if (k == 0)
+                    if (k === 0)
                         v++; // count tf only in the first text
                     uniq[gram] = v;
                 });
@@ -77,7 +80,7 @@
             this.analyzer(s,function(token) {
                 query.add(self.term_query(token));
             })
-            if (query.length == 0)
+            if (query.length === 0)
                 return undefined;
             return query;
         };
@@ -88,7 +91,7 @@
                 var doc_id = query.doc_id;
                 var tf = (doc_id & 0xFFFF);
                 doc_id >>= 16;
-                if (tf == 0)
+                if (tf === 0)
                     tf = 1;
                 // tf * idf
                 return tf * (1 + Math.log(n_docs / (query.count() + 1)));
@@ -113,10 +116,10 @@
             return this;
         };
         this.collect = function(scorer,fx) {
-            while(this.next() != Number.MAX_VALUE) {
+            while(this.next() !== Number.MAX_VALUE) {
                 var score = 0;
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].doc_id == this.doc_id) {
+                    if (this[i].doc_id === this.doc_id) {
                         score += scorer(this[i]);
                     }
                 }
@@ -146,13 +149,13 @@
         this.next = function() {
             if (cursor > term_enum.length - 1)
                 return this.doc_id = Number.MAX_VALUE;
-            if (this.doc_id != Number.MAX_VALUE)
+            if (this.doc_id !== Number.MAX_VALUE)
                 cursor++;
             
             return this.doc_id = term_enum[cursor];
         };
         this.collect = function(scorer,fx) {
-            while(this.next() != Number.MAX_VALUE) {
+            while(this.next() !== Number.MAX_VALUE) {
                 fx(this.doc_id >> 16, scorer(this));
             }
         };
