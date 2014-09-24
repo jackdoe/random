@@ -14,4 +14,8 @@ index.search(index.match_query("jack"),function(id,score) {
     console.log("id: " + id + " score: " + score);
 },3);
 
+index.search(index.match_query(""),function(id,score) {
+    console.log("id: " + id + " score: " + score);
+},3);
+
 </script>
