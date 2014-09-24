@@ -85,12 +85,11 @@ var Index = function() {
 
     this.search = function(query,fx,limit) {
         var scored = [];
-        var n_docs = this.count().toFixed(2);
-        query.collect(function (query) {
-            var tf = (query.doc_id & 0xFFFF);
+        query.collect(function (term) {
+            var tf = (term.doc_id & 0xFFFF);
             if (tf === 0)
                 tf = 1;
-            return tf * query.idf;
+            return tf * term.idf;
         },function(doc,score) {
             scored.push([doc,score]);
         });
