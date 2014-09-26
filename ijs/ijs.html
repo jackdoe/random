@@ -2,13 +2,34 @@
 <script>
 
 var index = new Index;
+index.analyzer = index.tokenize;
 index.bulk_index('id_0',["jack jack"]);
 index.bulk_index('id_1',["asdas"]);
-index.bulk_index('id_2',["jack doe асд"]);
+index.bulk_index('id_2',["jack doe"]);
+index.bulk_index('id_3',["jack doe moe"]);
+index.bulk_index('id_4',["jack doe joe red green moe"]);
 
+index.search(new BoolMustQuery()
+             .add(index.term_query("jack"))
+             .add(index.term_query("doe"))
+             .add(new BoolShouldQuery()
+                  .add(index.term_query("moe"))
+                  .add(new BoolShouldQuery()
+                       .add(index.term_query("red"))
+                       .add(index.term_query("green")))),function(id,score) {
+    console.log("must id: " + id + " score: " + score);
+},3);
+
+var q = new BoolMustQuery().add(index.term_query("moe")).add(new BoolShouldQuery().add(index.term_query("jack")));
+index.search(q,function(id,score) {
+    console.log("must id: " + id + " score: " + score);
+},3);
+
+/*
 index.search(new BoolShouldQuery().add(index.term_query("ас")).add(index.term_query("jac")),function(id,score) {
     console.log("id: " + id + " score: " + score);
 },3);
+
 
 index.search(index.match_query("jack"),function(id,score) {
     console.log("id: " + id + " score: " + score);
@@ -17,5 +38,5 @@ index.search(index.match_query("jack"),function(id,score) {
 index.search(index.match_query(""),function(id,score) {
     console.log("id: " + id + " score: " + score);
 },3);
-
+*/
 </script>
