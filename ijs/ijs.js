@@ -72,7 +72,7 @@ var Index = function() {
 
     this.term_query = function(token) {
         if (token in inverted) {
-            return new TermQuery(this,inverted[token]);
+            return new TermQuery(this,inverted[token],token);
         }
         return undefined;
     };
@@ -116,7 +116,7 @@ var Index = function() {
 var BoolShouldQuery = function (){
     this.prototype = new Array;
     this.push = Array.prototype.push;
-    this.doc_id = Number.MAX_VALUE;
+    this.doc_id = -1;
     this.add = function(query) {
         if (query)
             this.push(query);
@@ -147,7 +147,7 @@ var BoolShouldQuery = function (){
         var new_doc = Number.MAX_VALUE;
         for (var i = 0; i < this.length; i++) {
             var cur_doc = this[i].doc_id;
-            if (cur_doc != target) cur_doc = this[i].jump(target);
+            if (cur_doc < target) cur_doc = this[i].jump(target);
             if (cur_doc < new_doc) new_doc = cur_doc;
         }
 
@@ -167,7 +167,7 @@ var BoolMustQuery = function (){
     this.prototype = new Array;
     this.push = Array.prototype.push;
     this.sort = Array.prototype.sort;
-    this.doc_id = Number.MAX_VALUE;
+    this.doc_id = -1;
     var lead = undefined;
 
     this.add = function(query) {
@@ -220,14 +220,18 @@ var BoolMustQuery = function (){
     };
 };
 
-var TermQuery = function(index,term_enum) {
-    this.doc_id = Number.MAX_VALUE;
+var TermQuery = function(index,term_enum,token) {
+    this.doc_id = -1;
     this.idf = (1 + Math.log(index.count() / (term_enum.length + 1)));
     this.tf = 0;
+    this.token = token;
     var cursor = 0;
     var term_enum = term_enum;
 
     this.update = function() {
+        if (cursor > term_enum.length - 1)
+            return this.doc_id = Number.MAX_VALUE;
+
         var doc_id = term_enum[cursor];
         this.tf = doc_id & 0xFFFF;
         return this.doc_id = doc_id >> 16;
@@ -238,11 +242,8 @@ var TermQuery = function(index,term_enum) {
     };
 
     this.next = function() {
-        if (this.doc_id !== Number.MAX_VALUE)
+        if (this.doc_id !== -1)
             cursor++;
-
-        if (cursor > term_enum.length - 1)
-            return this.doc_id = Number.MAX_VALUE;
 
         return this.update();
     };
@@ -254,27 +255,22 @@ var TermQuery = function(index,term_enum) {
         if (this.doc_id === target || target === Number.MAX_VALUE)
             return this.doc_id = target;
 
-        var end = this.count() - 1;
-        var mid = end;
-        var start = cursor;
+        var end = this.count();
+        var start = Math.min(0,cursor);
         while (start < end) {
-            mid = start + Math.floor((end - start) / 2)
+            var mid = start + Math.floor((end - start) / 2)
             var doc = term_enum[mid] >> 16;
-            if (doc < target) {
-                start = mid + 1;
-            } else if (doc > target) {
-                end = mid;
-            } else {
-                cursor = mid;
-                return this.doc_id = doc;
+            if (doc == target) {
+                start = mid;
+                break;
             }
+            if (doc < target)
+                start = mid + 1;
+            else
+                end = mid;
         }
-        if (start >= end) {
-            return this.doc_id = cursor = Number.MAX_VALUE;
-        } else {
-            cursor = start;
-            return this.update();
-        }
+        cursor = start;
+        return this.update();
     };
 
     this.score = function(scorer) {
