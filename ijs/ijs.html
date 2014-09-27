@@ -9,6 +9,8 @@ index.bulk_index('id_1',["asdas"]);
 index.bulk_index('id_2',["jack doe"]);
 index.bulk_index('id_3',["jack doe moe"]);
 index.bulk_index('id_4',["jack doe joe red green moe кирилица"]);
+index.store('aaa');
+var i2 = new Index().load('aaa');
 
 index.search(new BoolMustQuery()
              .add(index.term_query("jack"))
@@ -29,7 +31,7 @@ index.search(q,function(id,score) {
 index.search(index.match_query(""),function(id,score) {
     console.log("empty: " + id + " score: " + score);
 },3);
-index.search(index.match_query("jack"),function(id,score) {
+i2.search(index.match_query("jack"),function(id,score) {
     console.log("jack: " + id + " score: " + score);
 },3);
 

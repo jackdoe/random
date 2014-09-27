@@ -3,7 +3,23 @@ var Index = function() {
     var forward = [];
     var tokenizer_re = new RegExp('[ \n\r?!.,_-]+');
     var self = this;
-
+    this.store = function(storage_key) {
+        localStorage.setItem(storage_key, JSON.stringify({ forward: forward, inverted: inverted }));
+        return this;
+    },
+    this.load = function(storage_key) {
+        var value = localStorage.getItem(storage_key);
+        if (value && value[0] === '{') {
+            value = JSON.parse(value);
+            inverted = value.inverted;
+            forward = value.forward;
+        }
+        return this;
+    };
+    this.reset = function() {
+        forward = [];
+        inverted = {};
+    };
     this.count = function() {
         return forward.length;
     };
