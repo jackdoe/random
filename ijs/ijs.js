@@ -105,7 +105,7 @@ var Index = function() {
         });
 
         // fixme: use priority queue
-        scored.sort(function(a,b) { b[1] - a[1] })
+        scored.sort(function(a,b) { return b[1] - a[1] })
         for (var i = 0; i < scored.length && limit > 0; i++, limit--) {
             fx(forward[scored[i][0]],scored[i][1]);
         }
