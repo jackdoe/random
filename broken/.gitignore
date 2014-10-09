@@ -1,4 +1,4 @@
-*.c
+broken.c
 *.o
 blib/
 Makefile
