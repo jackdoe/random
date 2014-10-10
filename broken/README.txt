@@ -48,3 +48,13 @@ Missing separate debuginfos, use: debuginfo-install perl5182-5.18.2-1.el6.x86_64
 #5  0x00007ffff7b10313 in Perl_runops_standard () from /usr/local/perl/5.18.2/lib/CORE/libperl.so
 #6  0x00007ffff7aa9c4c in perl_run () from /usr/local/perl/5.18.2/lib/CORE/libperl.so
 #7  0x0000000000400ddc in main ()
+
+
+result:
+
+the issue is that without _GNU_SOURCE canonicalize_file_name() is not declared, and
+compiler assumes it returns int, so if the returned address is > 2^32, it is mangled.
+
+
+
+
