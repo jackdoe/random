@@ -30,6 +30,8 @@
   (set-buffer-modified-p t)
   (save-buffer))
 
+(global-font-lock-mode -1)
+
 (defconst my-mode-line-buffer-identification
   (list
    '(:eval
@@ -45,8 +47,15 @@
 (global-set-key [(control ?=)] 'text-scale-increase)
 (global-set-key [(control ?-)] 'text-scale-decrease)
 (global-set-key [(control ?_)] 'text-scale-decrease)
+(global-set-key (kbd "M-RET") (lambda () (interactive) (hs-toggle-hiding)))
 (global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
 
+(add-hook 'c-mode-common-hook   'hs-minor-mode)
+(add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+(add-hook 'java-mode-hook       'hs-minor-mode)
+(add-hook 'lisp-mode-hook       'hs-minor-mode)
+(add-hook 'perl-mode-hook       'hs-minor-mode)
+(add-hook 'sh-mode-hook         'hs-minor-mode)
 (setq-default
  mode-line-buffer-identification
  my-mode-line-buffer-identification)
