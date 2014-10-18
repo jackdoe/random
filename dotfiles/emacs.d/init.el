@@ -1,5 +1,5 @@
 (require 'tramp)
-    (setq tramp-default-method "ssh")
+(setq tramp-default-method "ssh")
 (put 'temporary-file-directory 'standard-value '((file-name-as-directory "/tmp")))
 
 (defun region-length ()
@@ -30,8 +30,6 @@
   (set-buffer-modified-p t)
   (save-buffer))
 
-(global-font-lock-mode -1)
-
 (defconst my-mode-line-buffer-identification
   (list
    '(:eval
@@ -54,6 +52,10 @@
 (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
 (add-hook 'java-mode-hook       'hs-minor-mode)
 (add-hook 'lisp-mode-hook       'hs-minor-mode)
+(add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'lisp-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'clojure-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'perl-mode-hook       'hs-minor-mode)
 (add-hook 'sh-mode-hook         'hs-minor-mode)
 (setq-default
@@ -108,7 +110,6 @@
 (setq apropos-do-all t)
 (setq backward-delete-char-untabify nil)
 (fboundp 'tool-bar-mode)
-
 
 (require 'package)
 (add-to-list 'package-archives
@@ -177,3 +178,16 @@
       mac-command-key-is-meta t
       mac-command-modifier 'meta
       mac-option-modifier 'none)
+(defun rename-file-and-buffer ()
+  "Rename the current buffer and file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (message "Buffer is not visiting a file!")
+      (let ((new-name (read-file-name "New name: " filename)))
+        (cond
+         ((vc-backend filename) (vc-rename-file filename new-name))
+         (t
+          (rename-file filename new-name t)
+          (set-visited-file-name new-name t t)))))))
+(global-font-lock-mode -1)
