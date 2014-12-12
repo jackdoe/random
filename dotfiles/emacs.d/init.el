@@ -6,6 +6,43 @@
   "length of a region"
   (interactive)
   (message (format "%d" (- (region-end) (region-beginning)))))
+(setq undo-limit 20000000)
+(setq undo-strong-limit 40000000)
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "silver")
+
+; Navigation
+(defun previous-blank-line ()
+  "Moves to the previous line containing nothing but whitespace."
+  (interactive)
+  (search-backward-regexp "^[ \t]*\n")
+)
+
+(defun next-blank-line ()
+  "Moves to the next line containing nothing but whitespace."
+  (interactive)
+  (forward-line)
+  (search-forward-regexp "^[ \t]*\n")
+  (forward-line -1)
+)
+(define-key global-map (kbd "M-p") 'previous-blank-line)
+(define-key global-map (kbd "M-n") 'next-blank-line)
+(define-key global-map [C-up] 'previous-blank-line)
+(define-key global-map [C-down] 'next-blank-line)
+(define-key global-map "\e[" 'start-kbd-macro)
+(define-key global-map "\e]" 'end-kbd-macro)
+(define-key global-map "\e'" 'call-last-kbd-macro)
+(define-key global-map (kbd "C-1") 'find-file)
+(define-key global-map (kbd "C-2") 'find-file-other-window)
+(define-key global-map [C-tab] 'indent-region)
+
+(load-library "view")
+(require 'cc-mode)
+(require 'ido)
+(require 'compile)
+(ido-mode t)
+
+(setq scroll-step 3)
 (setq ispell-program-name "/usr/local/bin/ispell")
 (setq ring-bell-function 'ignore)
 (cua-mode 0)
@@ -40,6 +77,11 @@
            (substring host-name 0 (match-beginning 1))
          host-name)))
    ": %12b"))
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 (global-set-key [(control ?+)] 'text-scale-increase)
 (global-set-key [(control ?=)] 'text-scale-increase)
@@ -198,3 +240,12 @@
     (shell-command-on-region b e
      "python -mjson.tool" (current-buffer) t)))
 (global-font-lock-mode -1)
+
+
+
+(setq next-line-add-newlines nil)
+(setq-default truncate-lines t)
+(setq truncate-partial-width-windows nil)
+;;(split-window-horizontally)
+
+(toggle-frame-fullscreen)
