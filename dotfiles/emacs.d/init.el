@@ -54,7 +54,7 @@
 (blink-cursor-mode 0)
 (load-theme 'tango t)
 (add-to-list 'load-path "~/.emacs.d/lisp/")
-(set-face-attribute 'default nil :height 160)
+(set-face-attribute 'default nil :height 130)
 (global-set-key [(control h)] 'delete-backward-char)
 (defun dos2unix ()
   "Replace DOS eolns CR LF with Unix eolns CR"
