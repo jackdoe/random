@@ -25,6 +25,7 @@
   (search-forward-regexp "^[ \t]*\n")
   (forward-line -1)
 )
+
 (define-key global-map (kbd "M-p") 'previous-blank-line)
 (define-key global-map (kbd "M-n") 'next-blank-line)
 (define-key global-map [C-up] 'previous-blank-line)
@@ -35,6 +36,13 @@
 (define-key global-map (kbd "C-1") 'find-file)
 (define-key global-map (kbd "C-2") 'find-file-other-window)
 (define-key global-map [C-tab] 'indent-region)
+
+(global-set-key [(control ?+)] 'text-scale-increase)
+(global-set-key [(control ?=)] 'text-scale-increase)
+(global-set-key [(control ?-)] 'text-scale-decrease)
+(global-set-key [(control ?_)] 'text-scale-decrease)
+(global-set-key (kbd "M-RET") (lambda () (interactive) (hs-toggle-hiding)))
+(global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
 
 (load-library "view")
 (require 'cc-mode)
@@ -82,13 +90,6 @@
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-(global-set-key [(control ?+)] 'text-scale-increase)
-(global-set-key [(control ?=)] 'text-scale-increase)
-(global-set-key [(control ?-)] 'text-scale-decrease)
-(global-set-key [(control ?_)] 'text-scale-decrease)
-(global-set-key (kbd "M-RET") (lambda () (interactive) (hs-toggle-hiding)))
-(global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
 
 (add-hook 'c-mode-common-hook   'hs-minor-mode)
 (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
@@ -248,4 +249,5 @@
 (setq truncate-partial-width-windows nil)
 ;;(split-window-horizontally)
 
-(toggle-frame-fullscreen)
+;;(toggle-frame-fullscreen)
+(which-func-mode 1)
