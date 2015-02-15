@@ -14,7 +14,7 @@ bindsym Control+Shift+1 [class="^.*"] border toggle
 
 set $mod Mod4
 exec gnome-settings-daemon
-exec xautolock -time 5 -locker 'i3lock' &
+exec xautolock -time 5 -locker 'i3lock -c 000000' &
 exec --no-startup-id ssh-add
 exec --no-startup-id xsetroot -solid "#333333"
 
