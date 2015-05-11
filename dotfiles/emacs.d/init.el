@@ -8,8 +8,10 @@
   (message (format "%d" (- (region-end) (region-beginning)))))
 (setq undo-limit 20000000)
 (setq undo-strong-limit 40000000)
+
 (global-hl-line-mode 1)
-(set-face-background 'hl-line "silver")
+
+(set-face-background 'hl-line "gray")
 
 ; Navigation
 (defun previous-blank-line ()
@@ -253,3 +255,31 @@
 (which-func-mode 1)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+(load-file "~/.emacs.d/org-present.el")
+
+(eval-after-load "org-present"
+  '(progn
+     (add-hook 'org-present-mode-hook
+               (lambda ()
+                 (org-present-big)
+                 (org-display-inline-images)
+                 (org-present-hide-cursor)
+                 (org-present-read-only)))
+     (add-hook 'org-present-mode-quit-hook
+               (lambda ()
+                 (org-present-small)
+                 (org-remove-inline-images)
+                 (org-present-show-cursor)
+                 (org-present-read-write)))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages (quote (org ergoemacs-mode clojure-mode))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
