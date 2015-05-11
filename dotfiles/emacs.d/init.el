@@ -256,7 +256,8 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (load-file "~/.emacs.d/org-present.el")
-
+(require 'go-mode-autoloads)
+(add-hook 'before-save-hook #'gofmt-before-save)
 (eval-after-load "org-present"
   '(progn
      (add-hook 'org-present-mode-hook
