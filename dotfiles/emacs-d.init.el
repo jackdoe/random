@@ -301,8 +301,8 @@
 (setq mu4e-sent-folder   "/mu-sent")
 (setq mu4e-drafts-folder "/mu-drafts")
 (setq mu4e-trash-folder  "/mu-trash")
-(setq mu4e-get-mail-command "~/bin/bloody-hell-mail")
-
+(setq mu4e-get-mail-command "~/bin/bloody-hell-mail"
+      mu4e-update-interval 300)
 (setq mu4e-attachment-dir "~/Desktop")
 (setq mu4e-view-show-images t)
 (setq mu4e-compose-keep-self-cc t)
