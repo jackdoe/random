@@ -14,7 +14,7 @@ bindsym Control+Shift+1 [class="^.*"] border toggle
 
 set $mod Mod4
 exec gnome-settings-daemon
-exec xautolock -time 5 -locker 'i3lock -c 000000' &
+exec --no-startup-id xautolock -time 10 -locker "gnome-screensaver-command --lock"
 exec --no-startup-id ssh-add
 exec --no-startup-id xsetroot -solid "#333333"
 exec --no-startup-id nm-applet
@@ -52,7 +52,7 @@ font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec xterm
 hide_edge_borders both
 # kill focused window
 bindsym $mod+Shift+q kill
