@@ -278,10 +278,61 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (org ergoemacs-mode clojure-mode))))
+ '(package-selected-packages (quote (org ergoemacs-mode clojure-mode)))
+ '(send-mail-function (quote smtpmail-send-it)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+
+
+
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+
+(require 'mu4e)
+(require 'smtpmail)
+(load-file "~/.emacs.d/x.el")
+(setq mu4e-maildir mu4e-maildir-path-string)
+
+(setq mu4e-sent-folder   "/mu-sent")
+(setq mu4e-drafts-folder "/mu-drafts")
+(setq mu4e-trash-folder  "/mu-trash")
+(setq mu4e-get-mail-command "~/bin/bloody-hell-mail")
+
+(setq mu4e-attachment-dir "~/Desktop")
+(setq mu4e-view-show-images t)
+(setq mu4e-compose-keep-self-cc t)
+(setq mu4e-maildir-shortcuts
+      '(("/INBOX"          . ?i)
+        ("/mu-sent"        . ?s)
+        ("/mu-drafts"      . ?r)))
+(setq
+   user-mail-address "borislav.nikolov@booking.com"
+   user-full-name  "borislav nikolov"
+   mu4e-compose-signature-auto-include nil
+   mu4e-compose-signature "")
+
+(setq smtpmail-queue-mail nil)
+
+(setq message-send-mail-function 'smtpmail-send-it
+      starttls-use-gnutls t
+      ;;
+      ;; machine imap.gmail.com login xxx port 993 password yyy
+      ;; machine smtp.gmail.com login xxx port 587 password yyy
+      ;;
+      ;; M-x epa-encrypt-file
+      smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
+
+      smtpmail-starttls-credentials '((smtpmail-starttls-credentials-string 587 nil nil))
+      smtpmail-default-smtp-server smtpmail-starttls-credentials-string
+      smtpmail-smtp-server smtpmail-starttls-credentials-string
+
+      smtpmail-smtp-service 587
+      smtpmail-debug-info nil)
+
+(setq message-kill-buffer-on-exit t)
+
