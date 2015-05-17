@@ -11,7 +11,7 @@
 
 (global-hl-line-mode 1)
 
-(set-face-background 'hl-line "silver")
+(set-face-background 'hl-line "gray")
 
 ; Navigation
 (defun previous-blank-line ()
@@ -305,7 +305,11 @@
       mu4e-update-interval 300)
 (setq mu4e-attachment-dir "~/Desktop")
 (setq mu4e-view-show-images t)
-(setq mu4e-compose-keep-self-cc t)
+(add-hook 'mu4e-compose-mode-hook
+          (defun my-add-bcc ()
+            "Add a Bcc: header."
+            (save-excursion (message-add-header (concat "Bcc: " user-mail-address "\n")))))
+
 (setq mu4e-maildir-shortcuts
       '(("/INBOX"          . ?i)
         ("/mu-sent"        . ?s)
