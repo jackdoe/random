@@ -305,11 +305,15 @@
       mu4e-update-interval 300)
 (setq mu4e-attachment-dir "~/Desktop")
 (setq mu4e-view-show-images t)
+(add-hook 'mu4e-view-mode-hook (lambda () (visual-line-mode)))
+
 (add-hook 'mu4e-compose-mode-hook
           (defun my-add-bcc ()
             "Add a Bcc: header."
             (save-excursion (message-add-header (concat "Bcc: " user-mail-address "\n")))))
-
+(setq browse-url-generic-program (executable-find "google-chrome"))
+(add-to-list 'mu4e-view-actions
+            '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 (setq mu4e-maildir-shortcuts
       '(("/INBOX"          . ?i)
         ("/mu-sent"        . ?s)
@@ -340,3 +344,10 @@
 
 (setq message-kill-buffer-on-exit t)
 
+(defun jump-to-inbox ()
+  (interactive)
+  (if (not (mu4e-running-p))
+      (error "mu4e is not running ")
+    (mu4e-headers-search "maildir:\"/INBOX\"")))
+
+(define-key global-map (kbd "M-m") 'jump-to-inbox)
