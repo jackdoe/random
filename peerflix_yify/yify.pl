@@ -41,7 +41,7 @@ my %ALLOW = (
         "ALL"   => 1
     },
     sort => {
-        "date"       => 1, 
+        "date"       => 1,
         "seeds"      => 1,
         "peers"      => 1,
         "size"       => 1,
@@ -72,7 +72,7 @@ my $request = "http://yify-torrents.com/api/list.json?" . join("&",map { $_ . "=
 print "GENERATED: $request\n";
 
 my $response = HTTP::Tiny->new->get($request);
-die "failed: $response->{reason}" 
+die "failed: $response->{reason}"
     unless $response->{success};
 
 my $json = decode_json($response->{content});
@@ -92,13 +92,12 @@ for my $row(@{ $json->{MovieList} }) {
 }
 
 for my $row(@{ $json->{MovieList} }) {
-    printf "%".$longest."s %s%s%s [ %s %s %s%ss%s/%sp ]\n",
+    printf "%".$longest."s %s%s%s [ %s %s %s%sseed%s ]\n",
                   $flix->($row),
                   $blue,$row->{MovieTitleClean},$norm,
                   $row->{Size},
                   $row->{Quality},
-                  $red,$row->{TorrentSeeds},$norm,
-                  $row->{Downloaded}
+                  $red,$row->{TorrentSeeds},$norm
 }
 
 # as simple as that.
@@ -118,7 +117,7 @@ sub process_options {
 
     my $keywords = "";
     GetOptions ("genre=s"   => $parse,
-                "quality=s" => $parse, 
+                "quality=s" => $parse,
                 "sort=s"    => $parse,
                 "order=s"   => $parse,
                 "limit=i"   => $parse,
