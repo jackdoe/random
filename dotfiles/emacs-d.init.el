@@ -11,7 +11,7 @@
 
 (global-hl-line-mode 1)
 
-(set-face-background 'hl-line "gray")
+(set-face-background 'hl-line "#dadada")
 
 ; Navigation
 (defun previous-blank-line ()
@@ -278,7 +278,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (org ergoemacs-mode clojure-mode)))
+ '(package-selected-packages (quote (multiple-cursors org ergoemacs-mode clojure-mode)))
  '(send-mail-function (quote smtpmail-send-it)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -302,7 +302,7 @@
 (setq mu4e-drafts-folder "/mu-drafts")
 (setq mu4e-trash-folder  "/mu-trash")
 (setq mu4e-get-mail-command "~/bin/bloody-hell-mail"
-      mu4e-update-interval 300)
+      mu4e-update-interval 600)
 (setq mu4e-attachment-dir "~/Desktop")
 (setq mu4e-view-show-images t)
 (add-hook 'mu4e-view-mode-hook (lambda () (visual-line-mode)))
@@ -351,3 +351,13 @@
     (mu4e-headers-search "maildir:\"/INBOX\"")))
 
 (define-key global-map (kbd "M-m") 'jump-to-inbox)
+(setq mu4e-html2text-command "html2text -utf8 -width 72")
+(put 'downcase-region 'disabled nil)
+
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-unset-key (kbd "M-<down-mouse-1>"))
+(global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
