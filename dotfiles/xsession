@@ -1,0 +1,7 @@
+xmodmap -e 'keycode 66 = Control_L'
+xmodmap -e 'clear Lock'
+xmodmap -e 'add Control = Control_L'
+xrdb /home/jack/.Xdefaults
+xsetroot -solid black &
+cwm
+

@@ -1,0 +1,54 @@
+
+
+# Shortcuts to start applications
+bind 4-Return xterm
+bind 4-e emacs
+bind 4-w firefox
+bind 4-r exec
+
+# Window management shortcuts
+# mostly shamelessly stolen from wmii
+bind 4-space search
+bind 4-f maximize
+bind 4-Tab cycle
+bind 4-1 grouponly1
+bind 4-2 grouponly2
+bind 4-3 grouponly3
+bind 4-4 grouponly4
+bind 4-5 goruponly5
+bind S4-1 movetogroup1
+bind S4-2 movetogroup2
+bind S4-3 movetogroup3
+bind S4-4 movetogroup4
+bind S4-5 movetogroup5
+bind 4-t vtile
+bind S4-c delete
+
+# Mousecursor movement
+bind S4-Right bigptrmoveright
+bind S4-Up bigptrmoveup
+bind S4-Down bigptrmovedown
+bind S4-Left bigptrmoveleft
+bind 4-Right ptrmoveright
+bind 4-Down ptrmovedown
+bind 4-Left ptrmoveleft
+bind 4-Right ptrmoveright
+
+# wm management
+bind S4-r restart
+bind 4-l lock
+bind S4-q quit
+
+# Moving around windows
+# as you would in wmii
+mousebind 4-1 window_move
+mousebind 4-3 window_resize
+
+sticky yes
+
+bind M-Tab unbind
+bind M-Left unbind
+bind M-Right unbind
+bind M-/ unbind
+bind C-/ unbind
+
