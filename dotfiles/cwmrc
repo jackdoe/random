@@ -59,4 +59,5 @@ autogroup 4     "Pidgin,Pidgin"
 autogroup 1     "emacs,Emacs"
 autogroup 2     "xterm,XTerm"
 autogroup 5     "xconsole,XConsole"
+autogroup 5     "xterm,wifi"
 
