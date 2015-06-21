@@ -13,13 +13,15 @@ bind 4-1 grouponly1
 bind 4-2 grouponly2
 bind 4-3 grouponly3
 bind 4-4 grouponly4
-bind 4-5 goruponly5
+bind 4-5 grouponly5
 bind S4-1 movetogroup1
 bind S4-2 movetogroup2
 bind S4-3 movetogroup3
 bind S4-4 movetogroup4
 bind S4-5 movetogroup5
+
 bind 4-t vtile
+bind 4-h htile
 bind 4-w delete
 
 # Mousecursor movement
@@ -43,18 +45,19 @@ moveamount 10
 
 sticky yes
 
-bind M-Tab unbind
-bind M-Left unbind
-bind M-Right unbind
+bind M-Tab unmap
+bind M-Left unmap
+bind M-Right unmap
 
 bind M-slash unmap
 bind C-slash unmap
 bind M-period unmap
 bind C-period unmap
+bind CM-n unmap
 
 autogroup 3     "Navigator,Firefox"
 autogroup 4     "Pidgin,Pidgin"
 autogroup 1     "emacs,Emacs"
 autogroup 2     "xterm,XTerm"
-autogroup 4     "xconsole,XConsole"
+autogroup 5     "xconsole,XConsole"
 
