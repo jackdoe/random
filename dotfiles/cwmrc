@@ -2,8 +2,6 @@
 
 # Shortcuts to start applications
 bind 4-Return xterm
-bind 4-e emacs
-bind 4-w firefox
 bind 4-r exec
 
 # Window management shortcuts
@@ -49,6 +47,14 @@ sticky yes
 bind M-Tab unbind
 bind M-Left unbind
 bind M-Right unbind
-bind M-/ unbind
-bind C-/ unbind
+
+bind M-slash unmap
+bind C-slash unmap
+bind M-period unmap
+bind C-period unmap
+
+autogroup 3     "Navigator,Firefox"
+autogroup 4     "pidgin"
+autogroup 1     "emacs"
+autogroup 2     "xterm"
 
