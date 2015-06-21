@@ -3,8 +3,8 @@
 # Shortcuts to start applications
 bind 4-Return xterm
 bind 4-r exec
+bind S4-p touch /tmp/force_wifi_reconnect
 
-# Window management shortcuts
 # mostly shamelessly stolen from wmii
 bind 4-space search
 bind 4-f maximize
@@ -24,7 +24,7 @@ bind 4-t vtile
 bind 4-h htile
 bind 4-w delete
 
-# Mousecursor movement
+
 bind S4-Right bigptrmoveright
 bind S4-Up bigptrmoveup
 bind S4-Down bigptrmovedown
@@ -40,7 +40,6 @@ bind S4-q quit
 
 mousebind 4-1 window_move
 mousebind S4-1 window_resize
-
 moveamount 10
 
 sticky yes
