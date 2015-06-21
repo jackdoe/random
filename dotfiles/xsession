@@ -4,6 +4,7 @@ xset r rate 200 50
 xmodmap -e 'keycode 66 = Control_L'
 xmodmap -e 'clear Lock'
 xmodmap -e 'add Control = Control_L'
+xidle -program "/usr/X11R6/bin/xlock" -timeout 300 &
 xrdb /home/jack/.Xdefaults
 xsetroot -solid black &
 cwm
