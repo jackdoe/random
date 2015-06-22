@@ -1,4 +1,4 @@
-xset m 20/4 1
+xset m 10/4 1
 xset r rate 200 50
 
 xmodmap -e 'keycode 66 = Control_L'
@@ -10,5 +10,5 @@ xsetroot -solid black &
 eval $(/usr/local/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
 export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
 xterm -bg white -fg black -class wifi -e /bin/sh -l -c "sudo /home/jack/random/dotfiles/wifi.sh" &
-cwm
+i3
 

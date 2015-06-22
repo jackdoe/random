@@ -53,6 +53,8 @@ bind C-slash unmap
 bind M-period unmap
 bind C-period unmap
 bind CM-n unmap
+bind M-Return unmap
+bind C-Return unmap
 
 autogroup 3     "Navigator,Firefox"
 autogroup 4     "Pidgin,Pidgin"
