@@ -1,6 +1,6 @@
 xset m 10/4 1
 xset r rate 200 50
-
+redshift -O 5600
 xmodmap -e 'keycode 66 = Control_L'
 xmodmap -e 'clear Lock'
 xmodmap -e 'add Control = Control_L'

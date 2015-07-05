@@ -13,6 +13,9 @@
 
 (set-face-background 'hl-line "#dadada")
 
+(setq-default line-spacing 1)
+(set-face-attribute 'default nil :family "dejavu sans mono" :height 110)
+
 ; Navigation
 (defun previous-blank-line ()
   "Moves to the previous line containing nothing but whitespace."
@@ -32,6 +35,7 @@
 (define-key global-map (kbd "M-n") 'next-blank-line)
 (define-key global-map [C-up] 'previous-blank-line)
 (define-key global-map [C-down] 'next-blank-line)
+(define-key global-map [M-return] 'hs-toggle-hiding)
 (define-key global-map "\e[" 'start-kbd-macro)
 (define-key global-map "\e]" 'end-kbd-macro)
 (define-key global-map "\e'" 'call-last-kbd-macro)
@@ -43,7 +47,6 @@
 (global-set-key [(control ?=)] 'text-scale-increase)
 (global-set-key [(control ?-)] 'text-scale-decrease)
 (global-set-key [(control ?_)] 'text-scale-decrease)
-(global-set-key (kbd "M-RET") (lambda () (interactive) (hs-toggle-hiding)))
 (global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
 
 (load-library "view")
@@ -64,7 +67,7 @@
 (blink-cursor-mode 0)
 (load-theme 'tango t)
 (add-to-list 'load-path "~/.emacs.d/lisp/")
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 110)
 (global-set-key [(control h)] 'delete-backward-char)
 (defun dos2unix ()
   "Replace DOS eolns CR LF with Unix eolns CR"
@@ -256,9 +259,9 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (load-file "~/.emacs.d/org-present.el")
-(load-file "~/.emacs.d/qml-mode.el")
-(require 'go-mode-autoloads)
-(add-hook 'before-save-hook #'gofmt-before-save)
+;;(load-file "~/.emacs.d/qml-mode.el")
+;;(require 'go-mode-autoloads)
+;;(add-hook 'before-save-hook #'gofmt-before-save)
 (eval-after-load "org-present"
   '(progn
      (add-hook 'org-present-mode-hook
@@ -286,73 +289,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-
-
-
-
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
-
-(require 'mu4e)
-(require 'smtpmail)
-(load-file "~/.emacs.d/x.el")
-(setq mu4e-maildir mu4e-maildir-path-string)
-
-(setq mu4e-sent-folder   "/mu-sent")
-(setq mu4e-drafts-folder "/mu-drafts")
-(setq mu4e-trash-folder  "/mu-trash")
-(setq mu4e-get-mail-command "~/bin/bloody-hell-mail"
-      mu4e-update-interval 600)
-(setq mu4e-attachment-dir "~/Desktop")
-(setq mu4e-view-show-images t)
-(add-hook 'mu4e-view-mode-hook (lambda () (visual-line-mode)))
-
-(add-hook 'mu4e-compose-mode-hook
-          (defun my-add-bcc ()
-            "Add a Bcc: header."
-            (save-excursion (message-add-header (concat "Bcc: " user-mail-address "\n")))))
-(setq browse-url-generic-program (executable-find "google-chrome"))
-(add-to-list 'mu4e-view-actions
-            '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-(setq mu4e-maildir-shortcuts
-      '(("/INBOX"          . ?i)
-        ("/mu-sent"        . ?s)
-        ("/mu-drafts"      . ?r)))
-(setq
-   user-mail-address "borislav.nikolov@booking.com"
-   user-full-name  "borislav nikolov"
-   mu4e-compose-signature-auto-include nil
-   mu4e-compose-signature "")
-
-(setq smtpmail-queue-mail nil)
-
-(setq message-send-mail-function 'smtpmail-send-it
-      starttls-use-gnutls t
-      ;;
-      ;; machine imap.gmail.com login xxx port 993 password yyy
-      ;; machine smtp.gmail.com login xxx port 587 password yyy
-      ;;
-      ;; M-x epa-encrypt-file
-      smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
-
-      smtpmail-starttls-credentials '((smtpmail-starttls-credentials-string 587 nil nil))
-      smtpmail-default-smtp-server smtpmail-starttls-credentials-string
-      smtpmail-smtp-server smtpmail-starttls-credentials-string
-
-      smtpmail-smtp-service 587
-      smtpmail-debug-info nil)
-
-(setq message-kill-buffer-on-exit t)
-
-(defun jump-to-inbox ()
-  (interactive)
-  (if (not (mu4e-running-p))
-      (error "mu4e is not running ")
-    (mu4e-headers-search "maildir:\"/INBOX\"")))
-
-(define-key global-map (kbd "M-m") 'jump-to-inbox)
-(setq mu4e-html2text-command "html2text -utf8 -width 72")
-(put 'downcase-region 'disabled nil)
 
 (require 'multiple-cursors)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
