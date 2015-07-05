@@ -4,6 +4,11 @@ redshift -O 5600
 xmodmap -e 'keycode 66 = Control_L'
 xmodmap -e 'clear Lock'
 xmodmap -e 'add Control = Control_L'
+xmodmap -e 'remove mod1 = Alt_L'
+xmodmap -e 'remove mod4 = Super_L'
+xmodmap -e 'add mod1 = Super_L'
+xmodmap -e 'add mod4 = Alt_L'
+
 xidle -program "/usr/X11R6/bin/xlock" -timeout 300 &
 xrdb /home/jack/.Xdefaults
 xsetroot -solid black &
