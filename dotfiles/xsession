@@ -9,11 +9,9 @@ xmodmap -e 'remove mod4 = Super_L'
 xmodmap -e 'add mod1 = Super_L'
 xmodmap -e 'add mod4 = Alt_L'
 
-xidle -program "/usr/X11R6/bin/xlock" -timeout 300 &
+xidle -program "/usr/bin/slock" -timeout 300 &
 xrdb /home/jack/.Xdefaults
-xsetroot -solid black &
-eval $(/usr/local/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
+eval `dbus-launch --sh-syntax --exit-with-session`
+eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
 export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
-xterm -bg white -fg black -class wifi -e /bin/sh -l -c "sudo /home/jack/random/dotfiles/wifi.sh" &
 i3
-
