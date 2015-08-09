@@ -15,11 +15,10 @@ public class Main {
             Random r = new Random();
             for (int i = 0; i < n; i++) {
                 m.incrementOrSet(i,i); // or m.put(i,i);
-                // long rand = r.nextLong();
-                // m.put(rand,rand); // or m.put(i,i);
-                // if (m.get(rand) != rand) {
-                //     System.out.println("AAAAAAAAAAAA\n");
-                // }
+                long rand = r.nextLong();
+                m.put(rand,rand); // or m.put(i,i);
+                if (m.get(rand) != rand)
+                    throw new RuntimeException("nop, " + m.get(rand) + " != " + rand);
             }
             double took = _took(t0);
             System.out.println("put took: " + took);
