@@ -1,4 +1,7 @@
 import java.util.Arrays;
+import java.util.function.BiConsumer;
+import java.util.Map;
+import java.util.HashMap;
 public class LongLongMap {
     public long[] values;
     public long[] keys;
@@ -15,6 +18,29 @@ public class LongLongMap {
         values = new long[initial_capacity];
         Arrays.fill(keys,MISSING);
         empty = initial_capacity;
+    }
+
+    public void incrementOrSet(LongLongMap other) {
+        for (int i = 0; i < other.keys.length; i++) {
+            if (other.keys[i] != MISSING)
+                incrementOrSet(other.keys[i],other.values[i]);
+        }
+    }
+
+    public void incrementOrSet(long k, long inc) {
+        if (k == MISSING)
+            throw new RuntimeException("cannot insert key("+k+") = MISSING: " + MISSING);
+
+        long idx = get_stored_index(k);
+        if (idx != MISSING) {
+            long old = values[(int)idx];
+            values[(int)idx] += inc;
+        } else {
+            if (empty < (keys.length / 2))
+                rehash();
+            store_new_value(keys,values,k,inc);
+            empty--;
+        }
     }
 
     public long put(long k, long v) {
@@ -54,24 +80,27 @@ public class LongLongMap {
     }
 
     public static void store_new_value(long[] _keys, long[] _values,long k, long v) {
-        int len = _keys.length;
-        int j = hash(k,len);
-        int idx = j;
+        long len = _keys.length;
+        long j = hash(k,len);
+        long idx = j;
         while (j < len) {
-            if (_keys[idx] == MISSING) {
-                _keys[idx] = k;
-                _values[idx] = v;
+            if (_keys[(int)idx] == MISSING) {
+                _keys[(int)idx] = k;
+                _values[(int)idx] = v;
                 return;
             }
             j++;
-            idx = j % len;
+            if (j < len)
+                idx = j;
+            else
+                idx = j % len;
         }
         throw new RuntimeException("unable to store in len:" + len);
     }
 
     public long get_stored_index(long k)  {
-        int len = keys.length;
-        int j = hash(k,len);
+        long len = keys.length;
+        long j = hash(k,len);
         long idx = j;
         while (j < len) {
             long item = keys[(int)idx];
@@ -80,7 +109,10 @@ public class LongLongMap {
             if (item == MISSING)
                 return MISSING;
             j++;
-            idx = j % len;
+            if (j < len)
+                idx = j;
+            else
+                idx = j % len;
         }
         return MISSING;
     }
@@ -90,13 +122,25 @@ public class LongLongMap {
         return idx != MISSING ? values[(int)idx] : MISSING;
     }
 
-    public static int smear(int hashCode) {
+    public static long smear(long hashCode) {
         hashCode ^= (hashCode >>> 20) ^ (hashCode >>> 12);
         return hashCode ^ (hashCode >>> 7) ^ (hashCode >>> 4);
     }
 
-    public static int hash(long x, int length) {
+    public static long hash(long x, long length) {
         x ^= (x >>> 32);
-        return smear((int)x) % length;
+        return smear(x) % length;
+    }
+
+    public void forEach(BiConsumer<Long, Long> consumer) {
+        for(int i = 0; i < keys.length; i++)
+            if (keys[i] != MISSING)
+                consumer.accept(keys[i], values[i]);
+    }
+
+    public Map<Long,Long> as_map() {
+        Map<Long,Long> m = new HashMap<Long,Long>();
+        forEach((k,n) -> m.put(k,n));
+        return m;
     }
 }

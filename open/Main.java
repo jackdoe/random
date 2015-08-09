@@ -12,7 +12,7 @@ public class Main {
             int bump = args.length > 0 ? Integer.parseInt(args[0]) : 10000000;
             long t0 = System.nanoTime();
             for (int i = 0; i < n; i++) {
-                m.put(i,i);
+                m.incrementOrSet(i,i); // or m.put(i,i);
             }
             double took = _took(t0);
             System.out.println("put took: " + took);
