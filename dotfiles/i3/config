@@ -44,8 +44,8 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec xterm
 
-bindsym $mod+bracketright exec "xrandr --output LVSD1 --mode 1280x800 --output HDMI1 --off"
-bindsym $mod+bracketleft exec "xrandr --output LVSD1 --off --output HDMI1 --mode 1920x1024"
+bindsym $mod+bracketright exec "xrandr --output LVDS1 --mode 1280x800 --output HDMI1 --off"
+bindsym $mod+bracketleft exec "xrandr --output LVDS1 --off --output HDMI1 --mode 1920x1080"
 
 hide_edge_borders both
 
