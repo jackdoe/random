@@ -58,7 +58,6 @@ public class IntIntMap {
         int j = hash(k,len);
         int idx = j;
         while (j < len) {
-
             if (_keys[idx] == MISSING) {
                 _keys[idx] = k;
                 _values[idx] = v;
