@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         for (int ii = 0; ii < 10; ii++) {
             System.gc();
-            IntIntMap m = new IntIntMap(100);
+            LongLongMap m = new LongLongMap(100);
             Map<Integer,Integer> mm = new HashMap<Integer,Integer>(100);
             int n = 20000;
             int bump = args.length > 0 ? Integer.parseInt(args[0]) : 10000000;
