@@ -64,7 +64,7 @@ public class LongLongMap {
     }
 
     public void rehash() {
-        int len = keys.length * 2;
+        int len = (int)upper_power_of_two(((int)keys.length * 2) - 1);
         long[] _keys = new long[len];
         long[] _values = new long[len];
 
@@ -92,7 +92,8 @@ public class LongLongMap {
                 return;
             }
             j++;
-            idx = (idx + 1) % len;
+            if (idx++ == len - 1)
+                idx = 0;
         }
         throw new RuntimeException("unable to store in len:" + len);
     }
@@ -108,7 +109,8 @@ public class LongLongMap {
             if (item == MISSING)
                 return MISSING;
             j++;
-            idx = (idx + 1) % len;
+            if (idx++ == len - 1)
+                idx = 0;
         }
         return MISSING;
     }
@@ -118,14 +120,8 @@ public class LongLongMap {
         return idx != MISSING ? values[(int)idx] : MISSING;
     }
 
-    public static long smear(long hashCode) {
-        hashCode ^= (hashCode >>> 20) ^ (hashCode >>> 12);
-        return hashCode ^ (hashCode >>> 7) ^ (hashCode >>> 4);
-    }
-
     public static long hash(long x, long length) {
-        x ^= (x >>> 32);
-        return smear(x) % length;
+        return (Murmur3.hashLong(x) & (length - 1));
     }
 
     public void forEach(BiConsumer<Long, Long> consumer) {
@@ -140,4 +136,18 @@ public class LongLongMap {
         forEach((k,n) -> m.put(k,n));
         return m;
     }
+
+    long upper_power_of_two(long v) {
+        v--;
+        v |= v >> 1;
+        v |= v >> 2;
+        v |= v >> 4;
+        v |= v >> 8;
+        v |= v >> 16;
+        v++;
+        return v;
+    }
 }
+
+
+

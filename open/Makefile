@@ -1,3 +1,3 @@
 all:
 	javac *.java
-	java -Xmx128m -XX:+PrintGCDetails Main 1000000
+	java -Xmx64m -XX:+PrintGCDetails Main 1000000
