@@ -20,6 +20,11 @@ public class LongLongMap {
         empty = initial_capacity;
     }
 
+    public void validate_key(long k) {
+        if (k == MISSING)
+            throw new RuntimeException("cannot insert key("+k+") = MISSING: " + MISSING);
+    }
+
     public void incrementOrSet(LongLongMap other) {
         for (int i = 0; i < other.keys.length; i++) {
             if (other.keys[i] != MISSING)
@@ -28,9 +33,7 @@ public class LongLongMap {
     }
 
     public void incrementOrSet(long k, long inc) {
-        if (k == MISSING)
-            throw new RuntimeException("cannot insert key("+k+") = MISSING: " + MISSING);
-
+        validate_key(k);
         long idx = get_stored_index(k);
         if (idx != MISSING) {
             long old = values[(int)idx];
@@ -44,8 +47,7 @@ public class LongLongMap {
     }
 
     public long put(long k, long v) {
-        if (k == MISSING || v == MISSING)
-            throw new RuntimeException("cannot insert key("+k+")/value("+v+") = MISSING: " + MISSING);
+        validate_key(k);
 
         long idx = get_stored_index(k);
         if (idx != MISSING) {
@@ -79,10 +81,10 @@ public class LongLongMap {
         values = _values;
     }
 
-    public static void store_new_value(long[] _keys, long[] _values,long k, long v) {
+    public static void store_new_value(long[] _keys, long[] _values, long k, long v) {
         long len = _keys.length;
-        long j = hash(k,len);
-        long idx = j;
+        long j = 0;
+        long idx = hash(k,len);
         while (j < len) {
             if (_keys[(int)idx] == MISSING) {
                 _keys[(int)idx] = k;
@@ -90,18 +92,15 @@ public class LongLongMap {
                 return;
             }
             j++;
-            if (j < len)
-                idx = j;
-            else
-                idx = j % len;
+            idx = (idx + 1) % len;
         }
         throw new RuntimeException("unable to store in len:" + len);
     }
 
     public long get_stored_index(long k)  {
         long len = keys.length;
-        long j = hash(k,len);
-        long idx = j;
+        long j = 0;
+        long idx = hash(k,len);
         while (j < len) {
             long item = keys[(int)idx];
             if (item == k)
@@ -109,10 +108,7 @@ public class LongLongMap {
             if (item == MISSING)
                 return MISSING;
             j++;
-            if (j < len)
-                idx = j;
-            else
-                idx = j % len;
+            idx = (idx + 1) % len;
         }
         return MISSING;
     }
@@ -133,9 +129,10 @@ public class LongLongMap {
     }
 
     public void forEach(BiConsumer<Long, Long> consumer) {
-        for(int i = 0; i < keys.length; i++)
+        for(int i = 0; i < keys.length; i++) {
             if (keys[i] != MISSING)
                 consumer.accept(keys[i], values[i]);
+        }
     }
 
     public Map<Long,Long> as_map() {
