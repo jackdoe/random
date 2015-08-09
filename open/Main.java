@@ -23,12 +23,11 @@ public class Main {
             }
             took = _took(t0);
             System.out.println("get took: " + took);
-
+            int sum = 0;
             for (int j = 1; j < 10; j++) {
                 t0 = System.nanoTime();
                 for (int i = 0; i < (bump * j); i++) {
-                    if (m.get(199) != 199)
-                        throw new RuntimeException("i("+i+") = ("+m.get(i)+")");
+                    sum += m.get(199);
                 }
                 took = _took(t0);
                 System.out.println("get took: " + took + " for " + (bump*j));
@@ -52,8 +51,7 @@ public class Main {
             for (int j = 1; j < 10; j++) {
                 t0 = System.nanoTime();
                 for (int i = 0; i < (bump * j); i++) {
-                    if (mm.get(199) != 10000)
-                        throw new RuntimeException("i("+i+") != 10000("+m.get(i)+")");
+                    sum += mm.get(199);
                 }
                 took = _took(t0);
                 System.out.println("mm get took: " + took + " for " + (bump*j));
