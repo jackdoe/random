@@ -5,15 +5,16 @@ import java.util.HashMap;
 public class LongLongMap {
     public long[] values;
     public long[] keys;
+    public boolean has_big_keys;
     public int empty = 0;
     public int get_collisions;
     public static long MISSING = Integer.MAX_VALUE;
 
-    public LongLongMap() { this(10); }
+    public LongLongMap() { this(128); }
     public LongLongMap(int initial_capacity) {
-        if (initial_capacity < 5)
-            throw new RuntimeException("initial capacity("+initial_capacity+") < 5");
-
+        if (initial_capacity < 127)
+            throw new RuntimeException("initial capacity("+initial_capacity+") < 127");
+        initial_capacity = (int) upper_power_of_two(initial_capacity);
         keys = new long[initial_capacity];
         values = new long[initial_capacity];
         Arrays.fill(keys,MISSING);
@@ -122,6 +123,11 @@ public class LongLongMap {
     public long get(long k) {
         long idx = get_stored_index(k);
         return idx != MISSING ? values[(int)idx] : MISSING;
+    }
+
+    public static long smear(long hashCode) {
+        hashCode ^= (hashCode >>> 20) ^ (hashCode >>> 12);
+        return hashCode ^ (hashCode >>> 7) ^ (hashCode >>> 4);
     }
 
     public static long hash(long x, long length) {
