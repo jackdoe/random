@@ -7,8 +7,8 @@ public class Main {
     public static void main(String[] args) {
         for (int ii = 0; ii < 1000; ii++) {
             System.gc();
-            LongLongMap m = new LongLongMap(128);
-            Map<Long,Long> mm = new HashMap<Long,Long>(128);
+            LongLongMap m = new LongLongMap(32);
+            Map<Long,Long> mm = new HashMap<Long,Long>(32);
             long key = 19;
             int n = 20;
             int bump = args.length > 0 ? Integer.parseInt(args[0]) : 10000000;
@@ -17,9 +17,9 @@ public class Main {
             for (int i = 0; i < n; i++) {
                 m.incrementOrSet(i,i); // or m.put(i,i);
                 long rand = r.nextLong();
-                // m.put(rand,rand); // or m.put(i,i);
-                // if (m.get(rand) != rand)
-                //     throw new RuntimeException("nop, " + m.get(rand) + " != " + rand);
+                m.put(rand,rand); // or m.put(i,i);
+                if (m.get(rand) != rand)
+                    throw new RuntimeException("nop, " + m.get(rand) + " != " + rand);
             }
             double took = _took(t0);
             System.out.println("put took: " + took);

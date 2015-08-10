@@ -10,10 +10,10 @@ public class LongLongMap {
     public int get_collisions;
     public static long MISSING = Integer.MAX_VALUE;
 
-    public LongLongMap() { this(128); }
+    public LongLongMap() { this(32); }
     public LongLongMap(int initial_capacity) {
-        if (initial_capacity < 127)
-            throw new RuntimeException("initial capacity("+initial_capacity+") < 127");
+        if (initial_capacity < 32)
+            throw new RuntimeException("initial capacity("+initial_capacity+") < 32");
         initial_capacity = (int) upper_power_of_two(initial_capacity);
         keys = new long[initial_capacity];
         values = new long[initial_capacity];
