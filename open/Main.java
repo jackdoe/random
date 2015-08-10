@@ -32,11 +32,12 @@ public class Main {
             int sum = 0;
             for (int j = 1; j < 10; j++) {
                 t0 = System.nanoTime();
+                m.get_collisions = 0;
                 for (int i = 0; i < (bump * j); i++) {
                     sum += m.get(199);
                 }
                 took = _took(t0);
-                System.out.println("get took: " + took + " for " + (bump*j));
+                System.out.println("get took: " + took + " for " + (bump*j) + " get collisions: " + m.get_collisions);
             }
 
             t0 = System.nanoTime();

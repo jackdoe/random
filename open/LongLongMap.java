@@ -6,7 +6,7 @@ public class LongLongMap {
     public long[] values;
     public long[] keys;
     public int empty = 0;
-
+    public int get_collisions;
     public static long MISSING = Integer.MAX_VALUE;
 
     public LongLongMap() { this(10); }
@@ -91,8 +91,10 @@ public class LongLongMap {
                 _values[(int)idx] = v;
                 return;
             }
+
             j++;
-            if (idx++ == len - 1)
+            idx++;
+            if (idx == len)
                 idx = 0;
         }
         throw new RuntimeException("unable to store in len:" + len);
@@ -109,8 +111,10 @@ public class LongLongMap {
             if (item == MISSING)
                 return MISSING;
             j++;
-            if (idx++ == len - 1)
+            idx++;
+            if (idx == len)
                 idx = 0;
+            get_collisions++;
         }
         return MISSING;
     }
@@ -148,6 +152,3 @@ public class LongLongMap {
         return v;
     }
 }
-
-
-
