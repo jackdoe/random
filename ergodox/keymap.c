@@ -76,22 +76,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(
         // left hand
-        EQL,  1,   2,    3,    4,   5,   ESC,
-        TAB,  Q,   W,    E,    R,   T,   F1,
-        LCTL, A,   S,    D,    F,   G,
-        LSFT, Z,   X,    C,    V,   B,   0,
-        0,    0,   0, LGUI, LALT,
+        EQL,       1,         2,       3,    4,   5,   ESC,
+        TAB,       Q,         W,       E,    R,   T,   PGUP,
+        LCTL,      A,         S,       D,    F,   G,
+        LSFT,      Z,         X,       C,    V,   B,   PGDOWN,
+        MS_BTN1,   MS_BTN2,   MS_BTN3, LGUI, LALT,
 
-                                             0 ,0,
-                                                0,
-                                       SPC,BSPC,0,
+                                      MS_LEFT ,MS_RIGHT,
+                                                  MS_UP,
+                                       SPC,BSPC,MS_DOWN,
 
             // right hand
             GRV,    6,   7,    8,    9,    0,   MINS,
             LBRC,   Y,   U,    I,    O,    P,   RBRC,
                     H,   J,    K,    L,    SCLN,QUOT,
-            0,      N,   M,    COMM, DOT,  SLSH,MINUS,
-                         LCTL, BSLS, 0,    0,   0,
+            F1,     N,   M,    COMM, DOT,  SLSH,MINUS,
+                         LCTL, BSLS, F2,   F3,   F4,
 
         LEFT,RIGHT,
         UP,
