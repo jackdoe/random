@@ -77,25 +77,25 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(
         // left hand
         GRV,       1,         2,       3,    4,   5,   ESC,
-        TAB,       Q,         W,       E,    R,   T,   MS_BTN1,
+        TAB,       Q,         W,       E,    R,   T,   F5,
         LCTL,      A,         S,       D,    F,   G,
-        LSFT,      Z,         X,       C,    V,   B,   MS_BTN2,
-        HOME,      END,       MS_BTN3, LGUI, LALT,
+        LSFT,      Z,         X,       C,    V,   B,   F6,
+        MS_BTN2,   MS_BTN3,   F9,      LGUI, LALT,
 
-                                      MS_LEFT ,MS_RIGHT,
+                                         MS_LEFT, MS_RIGHT,
                                                   MS_UP,
-                                       SPC,SPC,MS_DOWN,
+                                    SPC, MS_BTN1, MS_DOWN,
 
             // right hand
-            MINS,    6,   7,    8,    9,    0,    EQL,
-            LBRC,    Y,   U,    I,    O,    P,    RBRC,
-                     H,   J,    K,    L,    SCLN, QUOT,
-            BSPC,    N,   M,    COMM, DOT,  SLSH, BSLS,
-                         LCTL, F1, F2,   F3,   F4,
+            MINS,    6,  7,     8,    9,    0,    EQL,
+            LBRC,    Y,  U,     I,    O,    P,    RBRC,
+                     H,  J,     K,    L,    SCLN, QUOT,
+            F10,     N,  M,     COMM, DOT,  SLSH, BSLS,
+                         LCTL,  F1,   F2,   F3,   F4,
 
         LEFT,RIGHT,
         UP,
-        DOWN,ENT,ENT
+        DOWN,BSPC,ENT
     ),
 };
 
