@@ -1,3 +1,4 @@
+
 /*
 Copyright 2013 Oleg Kostyuk <cub.uanic@gmail.com>
 
@@ -77,9 +78,9 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(
         // left hand
         GRV,       1,         2,       3,    4,   5,   ESC,
-        TAB,       Q,         W,       E,    R,   T,   F5,
+        TAB,       Q,         W,       E,    R,   T,   WH_U,
         LCTL,      A,         S,       D,    F,   G,
-        LSFT,      Z,         X,       C,    V,   B,   F6,
+        LSFT,      Z,         X,       C,    V,   B,   WH_D,
         MS_BTN2,   MS_BTN3,   F9,      LGUI, LALT,
 
                                          MS_LEFT, MS_RIGHT,
@@ -90,12 +91,13 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             MINS,    6,  7,     8,    9,    0,    EQL,
             LBRC,    Y,  U,     I,    O,    P,    RBRC,
                      H,  J,     K,    L,    SCLN, QUOT,
-            F10,     N,  M,     COMM, DOT,  SLSH, BSLS,
-                         LCTL,  F1,   F2,   F3,   F4,
+            F10,     N,  M,     COMM, DOT,  SLSH, LSFT,
+                  BSPC,  BSLS,   F1,   F2, F3,
+        
 
         LEFT,RIGHT,
         UP,
-        DOWN,BSPC,ENT
+        DOWN,ENT,SPC
     ),
 };
 
