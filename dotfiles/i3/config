@@ -38,9 +38,7 @@ bindsym Control+bracketleft exec "xrandr --output eDP1 --off --output HDMI2 --mo
 hide_edge_borders both
 
 # start dmenu (a program launcher)
-bindsym Control+Shift+r exec dmenu_run
-
-# change focus
+bindsym Control+Shift+e exec dmenu_run
 bindsym Control+comma focus left
 bindsym Control+period focus right
 bindsym Control+q fullscreen
@@ -55,8 +53,5 @@ bindsym Control+6 move container to workspace 1
 bindsym Control+7 move container to workspace 2
 bindsym Control+8 move container to workspace 3
 bindsym Control+9 move container to workspace 4
-
-# exit i3 (logs you out of your X session)
-bindsym Control+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 for_window [class="^.*"] border pixel 1
