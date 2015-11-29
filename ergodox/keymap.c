@@ -1,4 +1,3 @@
-
 /*
 Copyright 2013 Oleg Kostyuk <cub.uanic@gmail.com>
 
@@ -75,30 +74,90 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    }
 
 static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    KEYMAP(
+    KEYMAP(  // layer 0 : default
         // left hand
-        GRV,       1,         2,       3,    4,   5,   ESC,
-        TAB,       Q,         W,       E,    R,   T,   WH_U,
-        LCTL,      A,         S,       D,    F,   G,
-        LSFT,      Z,         X,       C,    V,   B,   WH_D,
-        MS_BTN2,   MS_BTN3,   F9,      LGUI, LALT,
-
-                                         MS_LEFT, MS_RIGHT,
-                                                  MS_UP,
-                                    SPC, MS_BTN1, MS_DOWN,
-
-            // right hand
-            MINS,    6,  7,     8,    9,    0,    EQL,
-            LBRC,    Y,  U,     I,    O,    P,    RBRC,
-                     H,  J,     K,    L,    SCLN, QUOT,
-            F10,     N,  M,     COMM, DOT,  SLSH, LSFT,
-                  BSPC,  BSLS,   F1,   F2, F3,
-        
-
-        LEFT,RIGHT,
-        UP,
-        DOWN,ENT,SPC
+        ESC,  1,   2,  3,   4,   5,   FN2,
+        TAB,Q,   W,   E,   R,   T,   FN3,
+        LCTL, A,   S,   D,   F,   G,
+        LSFT,Z,   X,   C,   V,   B,   FN4,
+        NO,NO, NO, FN1, LALT,
+                                      LEFT,RIGHT,
+                                           UP,
+                                 SPC,ENT,  DOWN,
+        // right hand
+             NO, 6,   7,   8,   9,   0,   NO,
+             NO,  Y,   U,   I,   O,   P,   BSPC,
+                  H,   J,   K,   L,   SCLN,QUOT,
+             NO, N,   M,   COMM,DOT, SLSH,RSFT,
+             FN1, NO, NO, NO,NO,
+        HOME,END,
+        PGUP,
+        PGDN,MS_BTN1, ENT
     ),
+
+    KEYMAP(  // layer 1 : function and symbol keys
+        // left hand
+        TRNS,F1,  F2,  F3,  F4,  F5,  F11,
+        TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,FN0,FN0,LBRC,RBRC,TRNS,
+        TRNS,TRNS,TRNS,TRNS, TRNS,TRNS,TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,
+                                      TRNS,TRNS,
+                                           TRNS,
+                                 TRNS,TRNS,TRNS,
+        // right hand
+             F12, F6,  F7,  F8,  F9,  F10, TRNS,
+             TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+                   SLSH, MINS,EQL,GRV,TRNS, TRNS,
+             TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+                       TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,
+        TRNS,
+        TRNS,TRNS,TRNS
+    ),
+
+    KEYMAP(  // layer 2 : keyboard functions
+        // left hand
+        TRNS, TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,
+                                      TRNS,TRNS,
+                                           TRNS,
+                                 TRNS,TRNS,TRNS,
+        // right hand
+             FN4, TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+             TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+                  TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+             TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+                       TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,
+        TRNS,
+        TRNS,TRNS,TRNS
+    ),
+
+    KEYMAP(  // layer 3: numpad
+        // left hand
+        TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,
+                                      TRNS,TRNS,
+                                           TRNS,
+                                 TRNS,TRNS,TRNS,
+        // right hand
+             SLCK,NLCK,PSLS,PAST,PAST,PMNS,BSPC,
+             TRNS,NO,  P7,  P8,  P9,  PMNS,BSPC,
+                  NO,  P4,  P5,  P6,  PPLS,PENT,
+             TRNS,NO,  P1,  P2,  P3,  PPLS,PENT,
+                       P0,  PDOT,SLSH,PENT,PENT,
+        TRNS,TRNS,
+        TRNS,
+        TRNS,TRNS,TRNS
+    ),
+
 };
 
 /* id for user defined functions */
@@ -110,12 +169,83 @@ enum function_id {
  * Fn action definition
  */
 static const uint16_t PROGMEM fn_actions[] = {
+    ACTION_FUNCTION(TEENSY_KEY),                    // FN0 - Teensy key
+    ACTION_LAYER_MOMENTARY(1),                      // FN1 - switch to Layer1
+    ACTION_LAYER_SET(2, ON_PRESS),                  // FN2 - push Layer2
+    ACTION_LAYER_SET(3, ON_PRESS),                  // FN3 - push Layer3
+    ACTION_LAYER_SET(0, ON_PRESS),                  // FN4 - push Layer0
 };
 
-void action_function(keyrecord_t *event, uint8_t id, uint8_t opt)
+void simon_hotkey(keyrecord_t *record, action_t action)
 {
+    keyevent_t event = record->event;
+
+    switch (action.kind.id) {
+        /* Key and Mods */
+        case ACT_LMODS:
+        case ACT_RMODS:
+            {
+                uint8_t mods = (action.kind.id == ACT_LMODS) ?  action.key.mods :
+                                                                action.key.mods<<4;
+                if (event.pressed) {
+                    if (mods) {
+                        add_weak_mods(mods);
+                        send_keyboard_report();
+                    }
+                    register_code(action.key.code);
+                } else {
+                    unregister_code(action.key.code);
+                    if (mods) {
+                        del_weak_mods(mods);
+                        send_keyboard_report();
+                    }
+                }
+            }
+            break;
+        default:
+            print("not supported.\n");
+            break;
+    }
 }
 
+void action_function(keyrecord_t *record, uint8_t id, uint8_t opt) {
+    keyevent_t event = record->event;
+    if (id == TEENSY_KEY) {
+        uint8_t col = event.key.col;
+        uint8_t row = event.key.row;
+        uint8_t savedmods = get_mods();
+        uint8_t shiftpressed = (savedmods & (MOD_LSFT | MOD_RSFT));
+        uint8_t othermodspressed = (savedmods & (MOD_LGUI | MOD_RGUI | MOD_LCTL | MOD_RCTL | MOD_LALT | MOD_RALT ));
+
+        action_t action = { .code = ACTION_NO };
+        uint8_t keycode = KC_NO;
+
+        if (col == 2) { // Number row
+            switch (row) {
+                case 1:
+                    keycode = KC_LBRC;
+                    break;
+                case 2:
+                    keycode = KC_RBRC;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (keycode != KC_NO) {
+            action.code = ACTION_MODS_KEY(MOD_LSFT, keycode);
+            if (othermodspressed) {
+                action.key.mods = 0;
+            } else if (shiftpressed) {
+                action.key.mods = 0;
+                del_mods(MOD_LSFT | MOD_RSFT);
+            }
+            simon_hotkey(record, action);
+            if (shiftpressed)
+                set_mods(savedmods);
+        }
+    }
+}
 
 #define KEYMAPS_SIZE    (sizeof(keymaps) / sizeof(keymaps[0]))
 #define FN_ACTIONS_SIZE (sizeof(fn_actions) / sizeof(fn_actions[0]))
@@ -123,13 +253,22 @@ void action_function(keyrecord_t *event, uint8_t id, uint8_t opt)
 /* translates key to keycode */
 uint8_t keymap_key_to_keycode(uint8_t layer, key_t key)
 {
-    return pgm_read_byte(&keymaps[0][(key.row)][(key.col)]);
+    if (layer < KEYMAPS_SIZE) {
+        return pgm_read_byte(&keymaps[(layer)][(key.row)][(key.col)]);
+    } else {
+        // fall back to layer 0
+        return pgm_read_byte(&keymaps[0][(key.row)][(key.col)]);
+    }
 }
 
 /* translates Fn keycode to action */
 action_t keymap_fn_to_action(uint8_t keycode)
 {
     action_t action;
-    action.code = ACTION_NO;
+    if (FN_INDEX(keycode) < FN_ACTIONS_SIZE) {
+        action.code = pgm_read_word(&fn_actions[FN_INDEX(keycode)]);
+    } else {
+        action.code = ACTION_NO;
+    }
     return action;
 }
