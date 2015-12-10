@@ -20,16 +20,14 @@
 (defun previous-blank-line ()
   "Moves to the previous line containing nothing but whitespace."
   (interactive)
-  (search-backward-regexp "^[ \t]*\n")
-)
+  (search-backward-regexp "^[ \t]*\n"))
 
 (defun next-blank-line ()
   "Moves to the next line containing nothing but whitespace."
   (interactive)
   (forward-line)
   (search-forward-regexp "^[ \t]*\n")
-  (forward-line -1)
-)
+  (forward-line -1))
 
 (define-key global-map (kbd "M-p") 'previous-blank-line)
 (define-key global-map (kbd "M-n") 'next-blank-line)
@@ -39,8 +37,13 @@
 (define-key global-map "\e[" 'start-kbd-macro)
 (define-key global-map "\e]" 'end-kbd-macro)
 (define-key global-map "\e'" 'call-last-kbd-macro)
-(define-key global-map (kbd "C-1") 'find-file)
-(define-key global-map (kbd "C-2") 'find-file-other-window)
+(define-key global-map (kbd "<f5>") 'switch-to-buffer)
+(define-key global-map (kbd "<f6>") 'find-file)
+(define-key global-map (kbd "<f1>") 'save-buffer)
+(define-key global-map (kbd "<f2>") 'kill-buffer)
+(define-key global-map (kbd "<f10>") 'revert-buffer)
+(define-key global-map (kbd "<f9>") 'replace-string)
+
 (define-key global-map [C-tab] 'indent-region)
 
 (global-set-key [(control ?+)] 'text-scale-increase)
@@ -112,14 +115,45 @@
  
 ; (back-button-mode -1)
 
+(defun system-out-println ()
+  (interactive)
+  (save-excursion
+    (insert "System.out.println();")))
+
+(package-initialize)
+(require 'key-chord)
+(key-chord-define-global "jj" (lambda ()
+                                (interactive)
+                                (let ((prefix (if (equal major-mode 'perl-mode)
+                                                  "DEBUG::DUMP ("
+                                                "System.out.println(")))
+                                  (if mark-active
+                                      (progn
+                                        (let ((from (region-beginning)))
+                                          (let ((to (region-end)))
+                                            (deactivate-mark)
+                                            (goto-char from)
+                                            (insert prefix)
+                                            (goto-char (+ (length prefix) to))
+                                            (insert ");"))))
+                                    (progn
+                                      (insert prefix)
+                                      (end-of-line)
+                                      (insert ");"))))))
+(key-chord-mode 1)
+
+
+;;(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
+;;(require 'ergoemacs-mode)
+;;(setq ergoemacs-theme nil)
+;;(ergoemacs-theme-option-on '(guru no-backspace))
+;;(ergoemacs-mode 1)
+
 (setq-default indent-tabs-mode nil)
 (show-paren-mode 1)
 (setq-default c-basic-offset 4)
 (setq c-default-style "linux"
           c-basic-offset 4)
-; (setq mode-line-format ) 
-; (setq-default header-line-format mode-line-format) ; Copy mode-line
-; (setq-default mode-line-format nil) ; Remove mode-line
 
 (fringe-mode 0)
 (display-battery-mode 1)
@@ -162,14 +196,6 @@
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
-(package-initialize)
-(unless (package-installed-p 'clojure-mode)
-  (package-refresh-contents)
-  (package-install 'clojure-mode))
-
-;; See http://bzg.fr/emacs-hide-mode-line.html
-
-;; (defvar-local hidden-mode-line-mode nil)
 
 (define-minor-mode hidden-mode-line-mode
   "Minor mode to hide the mode-line in the current buffer."
@@ -209,7 +235,6 @@
       (set-mark (point)))
   (forward-word N))
 
-
 (defun my-mark-word-backward (N)
   (interactive "p")
   (if (and
@@ -226,6 +251,7 @@
       mac-command-key-is-meta t
       mac-command-modifier 'meta
       mac-option-modifier 'none)
+
 (defun rename-file-and-buffer ()
   "Rename the current buffer and file it is visiting."
   (interactive)
@@ -247,21 +273,18 @@
      "python -mjson.tool" (current-buffer) t)))
 (global-font-lock-mode -1)
 
-
-
 (setq next-line-add-newlines nil)
 (setq-default truncate-lines t)
 (setq truncate-partial-width-windows nil)
-;;(split-window-horizontally)
 
-;;(toggle-frame-fullscreen)
 (which-func-mode 1)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (load-file "~/.emacs.d/org-present.el")
-;;(load-file "~/.emacs.d/qml-mode.el")
-;;(require 'go-mode-autoloads)
-;;(add-hook 'before-save-hook #'gofmt-before-save)
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+
 (eval-after-load "org-present"
   '(progn
      (add-hook 'org-present-mode-hook
@@ -296,4 +319,27 @@
 (global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-c C-.") 'mc/mark-all-like-this)
+
+(autoload
+  'ace-jump-mode
+  "ace-jump-mode"
+  "Emacs quick move minor mode"
+  t)
+
+(define-key global-map (kbd "C-0") 'ace-jump-mode)
+
+;; enable recent files mode.
+(recentf-mode t)
+(setq recentf-max-saved-items 50)
+(defun ido-recentf-open ()
+  "Use `ido-completing-read' to \\[find-file] a recent file"
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
+
+(add-to-list 'c-offsets-alist '(arglist-close . c-lineup-close-paren))
+(setq cperl-indent-parens-as-block t)
+(setq perl-indent-parens-as-block t)
+(setq java-indent-parens-as-block t)
