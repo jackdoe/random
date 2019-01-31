@@ -1,0 +1,26 @@
+xterm*Background:black
+xterm*Foreground:white
+xterm*cursorColor:silver
+!xterm*pointerShape:arrow
+!xterm*pointerColor:blue
+xterm*VT100.geometry:80x32
+xterm*faceName:Terminus:style=Regular:size=14
+!xterm*font:-*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
+!xterm*faceName:Inconsolata:style=Regular:size=11
+!xterm*font:-*-dina-medium-r-*-*-16-*-*-*-*-*-*-*
+!xterm*renderFont:false
+xterm*dynamicColors:true
+xterm*utf8:2
+xterm*eightBitInput:true
+xterm*saveLines:40960
+xterm*scrollKey:true
+xterm*scrollTtyOutput:false
+xterm*scrollBar:false
+xterm*rightScrollBar:false
+xterm*jumpScroll:true
+xterm*multiScroll:true
+xterm*toolBar:false
+xterm*locale:true
+xterm*VT100.Translations: #override \
+                 Ctrl Shift <Key>V:    insert-selection(CLIPBOARD) \n\
+                 Ctrl Shift <Key>C:    copy-selection(CLIPBOARD)
