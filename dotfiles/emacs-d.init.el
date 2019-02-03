@@ -1,7 +1,8 @@
 (require 'tramp)
 (setq tramp-default-method "ssh")
 (put 'temporary-file-directory 'standard-value '((file-name-as-directory "/tmp")))
-
+(setenv "PATH" (concat (getenv "PATH") ":/usr/lib/dart/bin"))
+(setq exec-path (append exec-path '("/usr/lib/dart/bin")))
 (defun region-length ()
   "length of a region"
   (interactive)
@@ -33,7 +34,7 @@
 (define-key global-map (kbd "M-n") 'next-blank-line)
 (define-key global-map [C-up] 'previous-blank-line)
 (define-key global-map [C-down] 'next-blank-line)
-(define-key global-map [M-return] 'hs-toggle-hiding)
+;;(define-key global-map [M-return] 'hs-toggle-hiding)
 (define-key global-map "\e[" 'start-kbd-macro)
 (define-key global-map "\e]" 'end-kbd-macro)
 (define-key global-map "\e'" 'call-last-kbd-macro)
@@ -56,7 +57,7 @@
 (require 'cc-mode)
 (require 'ido)
 (require 'compile)
-(ido-mode t)
+(ido-mode 1)
 
 (setq scroll-step 3)
 (setq ispell-program-name "/usr/local/bin/ispell")
@@ -121,33 +122,7 @@
     (insert "System.out.println();")))
 
 (package-initialize)
-(require 'key-chord)
-(key-chord-define-global "jj" (lambda ()
-                                (interactive)
-                                (let ((prefix (if (equal major-mode 'perl-mode)
-                                                  "DEBUG::DUMP ("
-                                                "System.out.println(")))
-                                  (if mark-active
-                                      (progn
-                                        (let ((from (region-beginning)))
-                                          (let ((to (region-end)))
-                                            (deactivate-mark)
-                                            (goto-char from)
-                                            (insert prefix)
-                                            (goto-char (+ (length prefix) to))
-                                            (insert ");"))))
-                                    (progn
-                                      (insert prefix)
-                                      (end-of-line)
-                                      (insert ");"))))))
-(key-chord-mode 1)
 
-
-;;(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
-;;(require 'ergoemacs-mode)
-;;(setq ergoemacs-theme nil)
-;;(ergoemacs-theme-option-on '(guru no-backspace))
-;;(ergoemacs-mode 1)
 
 (setq-default indent-tabs-mode nil)
 (show-paren-mode 1)
@@ -160,7 +135,6 @@
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 
-;; Enable line numbersdisplay-time-24hr-format t
 (global-linum-mode 0)
 
 (defface egoge-display-time
@@ -214,19 +188,6 @@
      0 nil 'message
      (concat "Hidden Mode Line Mode enabled.  "
              "Use M-x hidden-mode-line-mode RET to make the mode-line appear."))))
-
-;; Activate hidden-mode-line-mode
-;; (hidden-mode-line-mode 1)
-
-;;(setq url-proxy-services
-;;   '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-;;     ("http" . "proxy.com:8080")
-;;     ("https" . "proxy.com:8080")))
-
-;; (setq mac-option-key-is-meta nil)
-;; (setq mac-command-key-is-meta t)
-;; (setq mac-command-modifier 'meta)
-;; (setq mac-option-modifier nil
 (defun my-mark-word (N)
   (interactive "p")
   (if (and 
@@ -280,38 +241,6 @@
 (which-func-mode 1)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-(load-file "~/.emacs.d/org-present.el")
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-
-(eval-after-load "org-present"
-  '(progn
-     (add-hook 'org-present-mode-hook
-               (lambda ()
-                 (org-present-big)
-                 (org-display-inline-images)
-                 (org-present-hide-cursor)
-                 (org-present-read-only)))
-     (add-hook 'org-present-mode-quit-hook
-               (lambda ()
-                 (org-present-small)
-                 (org-remove-inline-images)
-                 (org-present-show-cursor)
-                 (org-present-read-write)))))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (multiple-cursors org ergoemacs-mode clojure-mode)))
- '(send-mail-function (quote smtpmail-send-it)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 (require 'multiple-cursors)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
@@ -321,13 +250,6 @@
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-.") 'mc/mark-all-like-this)
 
-(autoload
-  'ace-jump-mode
-  "ace-jump-mode"
-  "Emacs quick move minor mode"
-  t)
-
-(define-key global-map (kbd "C-0") 'ace-jump-mode)
 
 ;; enable recent files mode.
 (recentf-mode t)
@@ -343,3 +265,224 @@
 (setq cperl-indent-parens-as-block t)
 (setq perl-indent-parens-as-block t)
 (setq java-indent-parens-as-block t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (exwm-surf exwm eglot lsp-mode dart-mode elixir-mode go-mode multiple-cursors))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  (when no-ssl
+    (warn "\
+Your version of Emacs does not support SSL connections,
+which is unsafe because it allows man-in-the-middle attacks.
+There are two things you can do about this warning:
+1. Install an Emacs version that does support SSL and be safe.
+2. Remove this warning from your init file so you won't see it again."))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  (when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+    (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
+(package-initialize)
+
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(defun my-go-mode-hook ()
+  ; (setq gofmt-command "goimports")
+  ; Call Gofmt before saving
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  ; Customize compile command to run go build
+  (if (not (string-match "go" compile-command))
+      (set (make-local-variable 'compile-command)
+           "go generate && go build -v && go test -v && go vet"))
+  ; Go oracle
+  ; (load-file "$GOPATH/src/golang.org/x/tools/cmd/oracle/oracle.el")
+  ; Godef jump key binding
+  (local-set-key (kbd "M-.") 'godef-jump)
+  (local-set-key (kbd "M-*") 'pop-tag-mark)
+)
+(add-hook 'go-mode-hook 'my-go-mode-hook)
+(setq dart-format-on-save t)
+;;(add-to-list 'eglot-server-programs '(dart-mode . ("dart_language_server")))
+(defvar dart-analyzer "/usr/lib/dart/bin/dartanalyzer")
+(add-to-list 'auto-mode-alist '("\\.dart\\'" . dart-mode))
+(add-hook 'dart-mode-hook 'lsp)
+
+(with-eval-after-load "projectile"
+  (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
+  (add-to-list 'projectile-project-root-files-bottom-up "BUILD"))
+
+(setq lsp-auto-guess-root t)
+ (require 'whitespace)
+ (setq whitespace-style '(face empty tabs lines-tail trailing))
+ (global-whitespace-mode t)
+
+(server-start)
+
+(global-unset-key (kbd "C-t"))
+
+(require 'exwm)
+(require 'exwm-config)
+(require 'exwm-surf)
+(defvar elmord/exwm-buffer-name-limit 50)
+(defun elmord/exwm-compute-buffer-name ()
+  (let ((class (or exwm-class-name ""))
+        (title (or exwm-title "")))
+    (cond
+     ((and (member class '("Firefox" "Firefox-esr" "Icedove"))
+           (string-match "\\`\\(.*\\)\\( - [^-]*\\)\\'" title))
+      (concat class ": " (match-string 1 title)))
+     ((member class '("Telegram" "TelegramDesktop"))
+      (if (equal title "") "Telegram" title))
+     ((equal class "skypeforlinux") "Skype")
+     (t (concat class ": " title)))))
+
+(defun elmord/exwm-update-buffer-name ()
+  (exwm-workspace-rename-buffer
+   (truncate-string-to-width
+    (elmord/exwm-compute-buffer-name)
+    elmord/exwm-buffer-name-limit
+    nil  ; start
+    nil  ; padding
+    "...")
+    ))
+
+(add-hook 'exwm-update-class-hook 'elmord/exwm-update-buffer-name)
+(add-hook 'exwm-update-title-hook 'elmord/exwm-update-buffer-name)
+
+
+(setq exwm-input-simulation-keys
+      '(
+        ;; movement
+        ([?\C-b] . [left])
+        ([?\M-b] . [C-left])
+        ([?\C-f] . [right])
+        ([?\M-f] . [C-right])
+        ([?\C-p] . [up])
+        ([?\C-n] . [down])
+        ([?\C-a] . [home])
+        ([?\C-e] . [end])
+        ([?\M-v] . [prior])
+        ([?\C-v] . [next])
+        ([?\C-d] . [delete])
+        ([?\C-k] . [S-end delete])
+
+        ;; cut/paste.
+        ([?\C-w] . [?\C-x])
+        ([?\C-t] . [?\C-t])
+        ([?\M-w] . [?\C-c])
+        ([?\C-y] . [?\C-v])
+        ([?\C-g] . [escape])
+
+        ;; always open new window on c-t, ignore the transpose thing
+        ([?\C-t] . [?\C-n])
+        ;; search
+        ([?\C-s] . [?\C-f])))
+
+(add-hook
+ 'exwm-manage-finish-hook
+ (defun init-exwm/set-xterm-simulation-keys ()
+   (when (and exwm-class-name (string= exwm-class-name "XTerm"))
+     (exwm-input-set-local-simulation-keys
+      '(([?\M-w] . [?\C-,])
+        ([?\C-y] . [?\C-.])
+        ([?\C-c] . [?\C-c]))))))
+
+
+
+(exwm-input-set-key (kbd "s-d") 'rename-buffer)
+(exwm-input-set-key (kbd "s-D") 'exwm-reset)
+(exwm-input-set-key (kbd "s-w") 'exwm-workspace-switch)
+(exwm-input-set-key (kbd "s-o") 'other-window)
+(exwm-input-set-key (kbd "s-m") 'exwm-workspace-move-window)
+(setq exwm-workspace-number 4)
+
+(define-key exwm-mode-map (kbd "C-x C-x")
+  (lambda () (interactive) (exwm-input--fake-key ?\C-x)))
+
+(define-key exwm-mode-map (kbd "C-c C-c")
+(lambda () (interactive) (exwm-input--fake-key ?\C-c)))
+
+(setq exwm-input-global-keys
+      `(
+
+        ([?\s-d] . exwm-reset)
+        ([?\s-m] . exwm-workspace-move-window)
+        ([?\s-o] . other-windoe)
+        ([?\s-w] . exwm-workspace-switch)
+        ,@(mapcar (lambda (i)
+                    `(,(kbd (format "s-%d" i)) .
+                      (lambda ()
+                        (interactive)
+                        (exwm-workspace-switch-create ,i))))
+                  (number-sequence 0 3))
+        ([?\s-r] . (lambda (command)
+		     (interactive (list (read-shell-command "$ ")))
+		     (start-process-shell-command command nil command)))
+        ([s-f2] . (lambda ()
+		    (interactive)
+		    (start-process "" nil "/usr/bin/slock")))
+        ([s-return] . (lambda ()
+		    (interactive)
+		    (start-process "" nil "/usr/bin/xterm")))))
+
+
+(add-hook 'exwm-update-class-hook
+          (lambda ()
+            (exwm-workspace-rename-buffer exwm-class-name)))
+
+(defun display/brighter ()
+  (interactive)
+  (start-process-shell-command "xbacklight + 10" nil "xbacklight -inc 10"))
+(defun display/darker()
+  (interactive)
+  (start-process-shell-command "xbacklight + 10" nil "xbacklight -dec 10"))
+
+(defun audio/up ()
+  (interactive)
+  (start-process-shell-command "xbacklight + 10" nil "pactl -- set-sink-volume 0 +5%"))
+(defun audio/down()
+  (interactive)
+  (start-process-shell-command "xbacklight + 10" nil "pactl -- set-sink-volume 0 -5%"))
+
+(defun audio/mute()
+  (interactive)
+  (start-process-shell-command "xbacklight + 10" nil "pactl set-sink-mute 0 toggle"))
+
+
+(exwm-input-set-key (kbd "<XF86MonBrightnessUp>") 'display/brighter)
+(exwm-input-set-key (kbd "<XF86MonBrightnessDown>") 'display/darker)
+(exwm-input-set-key (kbd "<XF86AudioRaiseVolume>") 'audio/up)
+(exwm-input-set-key (kbd "<XF86AudioLowerVolume>") 'audio/down)
+(exwm-input-set-key (kbd "<XF86AudioMute>") 'audio/mute)
+
+
+(exwm-enable)
+(exwm-config-ido)
+(exwm-config-misc)
+(setq use-dialog-box nil)
+
+;; dont put in m-backspace in kill ring
+(defun delete-word (arg)
+  "Delete characters backward until encountering the beginning of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point))))
+(global-set-key (kbd "<M-backspace>") 'delete-word)
+
+(setq exwm-workspace-show-all-buffers t)
