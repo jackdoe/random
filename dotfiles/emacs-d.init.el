@@ -437,6 +437,9 @@ There are two things you can do about this warning:
         ([s-f2] . (lambda ()
 		    (interactive)
 		    (start-process "" nil "/usr/bin/slock")))
+        ([?\s-p] . (lambda ()
+		    (interactive)
+		    (start-process "" nil "/usr/bin/shot")))
         ([s-return] . (lambda ()
 		    (interactive)
 		    (start-process "" nil "/usr/bin/xterm")))))
@@ -470,6 +473,8 @@ There are two things you can do about this warning:
 (exwm-input-set-key (kbd "<XF86AudioRaiseVolume>") 'audio/up)
 (exwm-input-set-key (kbd "<XF86AudioLowerVolume>") 'audio/down)
 (exwm-input-set-key (kbd "<XF86AudioMute>") 'audio/mute)
+
+
 
 
 (exwm-enable)
