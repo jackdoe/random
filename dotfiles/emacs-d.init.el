@@ -12,11 +12,6 @@
 
 (global-hl-line-mode 1)
 
-(set-face-background 'hl-line "#dadada")
-
-(setq-default line-spacing 1)
-(set-face-attribute 'default nil :family "dejavu sans mono" :height 110)
-
 ; Navigation
 (defun previous-blank-line ()
   "Moves to the previous line containing nothing but whitespace."
@@ -29,7 +24,8 @@
   (forward-line)
   (search-forward-regexp "^[ \t]*\n")
   (forward-line -1))
-
+(set-face-attribute 'default nil :family "terminus" :height 130 :weight 'normal)
+(set-face-background 'hl-line "#dadada")
 (define-key global-map (kbd "M-p") 'previous-blank-line)
 (define-key global-map (kbd "M-n") 'next-blank-line)
 (define-key global-map [C-up] 'previous-blank-line)
@@ -71,7 +67,7 @@
 (blink-cursor-mode 0)
 (load-theme 'tango t)
 (add-to-list 'load-path "~/.emacs.d/lisp/")
-(set-face-attribute 'default nil :height 110)
+;;(set-face-attribute 'default nil :height 110)
 (global-set-key [(control h)] 'delete-backward-char)
 (defun dos2unix ()
   "Replace DOS eolns CR LF with Unix eolns CR"
@@ -332,14 +328,43 @@ There are two things you can do about this warning:
  (setq whitespace-style '(face empty tabs lines-tail trailing))
  (global-whitespace-mode t)
 
+
+
+(setq exwm-workspace-show-all-buffers t)
+;; ;; ;;add keys to disable and enable the mouse
+;; ;; ;;xinput set-prop 12 "Device Enabled" 0
+;; ;; (set-background-color "black")
+
+;; ;; (set-foreground-color "white")
+
+;; ;; (set-face-attribute 'region nil :background "#666")
+;; ;; (set-cursor-color "#ffffff")
+;; ;; (require 'paren)
+;; ;; (set-face-background 'show-paren-match "#888")
+;; ;; (set-face-foreground 'show-paren-match (face-foreground 'default))
+
+
+;;(set-face-attribute 'show-paren-match nil :weight 'normal)
+
+(setq-default line-spacing 1)
+
+
+
+
+
 (server-start)
+
+
+
 
 (global-unset-key (kbd "C-t"))
 
 (require 'exwm)
 (require 'exwm-config)
 (require 'exwm-surf)
+
 (defvar elmord/exwm-buffer-name-limit 50)
+
 (defun elmord/exwm-compute-buffer-name ()
   (let ((class (or exwm-class-name ""))
         (title (or exwm-title "")))
@@ -384,7 +409,6 @@ There are two things you can do about this warning:
 
         ;; cut/paste.
         ([?\C-w] . [?\C-x])
-        ([?\C-t] . [?\C-t])
         ([?\M-w] . [?\C-c])
         ([?\C-y] . [?\C-v])
         ([?\C-g] . [escape])
@@ -401,8 +425,15 @@ There are two things you can do about this warning:
      (exwm-input-set-local-simulation-keys
       '(([?\M-w] . [?\C-,])
         ([?\C-y] . [?\C-.])
-        ([?\C-c] . [?\C-c]))))))
 
+        ([?\C-p] . [up])
+        ([?\C-n] . [down])
+        ([?\C-a] . [home])
+        ([?\C-e] . [end])
+        ([?\M-v] . [S-prior])
+        ([?\C-v] . [S-next])
+
+        ([?\C-c] . [?\C-c]))))))
 
 
 (exwm-input-set-key (kbd "s-d") 'rename-buffer)
@@ -430,7 +461,7 @@ There are two things you can do about this warning:
                       (lambda ()
                         (interactive)
                         (exwm-workspace-switch-create ,i))))
-                  (number-sequence 0 3))
+                  (number-sequence 0 4))
         ([?\s-r] . (lambda (command)
 		     (interactive (list (read-shell-command "$ ")))
 		     (start-process-shell-command command nil command)))
@@ -439,7 +470,10 @@ There are two things you can do about this warning:
 		    (start-process "" nil "/usr/bin/slock")))
         ([?\s-p] . (lambda ()
 		    (interactive)
-		    (start-process "" nil "/usr/bin/shot")))
+                    (start-process-shell-command "shot" nil "/usr/bin/shot")))
+        ([?\s-P] . (lambda ()
+		    (interactive)
+		    (start-process "" nil "/usr/bin/shot-whole")))
         ([s-return] . (lambda ()
 		    (interactive)
 		    (start-process "" nil "/usr/bin/xterm")))))
@@ -451,28 +485,33 @@ There are two things you can do about this warning:
 
 (defun display/brighter ()
   (interactive)
-  (start-process-shell-command "xbacklight + 10" nil "xbacklight -inc 10"))
+  (start-process-shell-command "xbacklight" nil "xbacklight -inc 5"))
 (defun display/darker()
   (interactive)
-  (start-process-shell-command "xbacklight + 10" nil "xbacklight -dec 10"))
+  (start-process-shell-command "xbacklight" nil "xbacklight -dec 5"))
+
+(defun mouse/toggle ()
+  (interactive)
+  (start-process-shell-command "xinput" nil "/usr/bin/toggle-mouse.sh"))
+
 
 (defun audio/up ()
   (interactive)
-  (start-process-shell-command "xbacklight + 10" nil "pactl -- set-sink-volume 0 +5%"))
+  (start-process-shell-command "pactl" nil "pactl -- set-sink-volume 0 +5%"))
 (defun audio/down()
   (interactive)
-  (start-process-shell-command "xbacklight + 10" nil "pactl -- set-sink-volume 0 -5%"))
-
+  (start-process-shell-command "pactl" nil "pactl -- set-sink-volume 0 -5%"))
 (defun audio/mute()
   (interactive)
-  (start-process-shell-command "xbacklight + 10" nil "pactl set-sink-mute 0 toggle"))
+  (start-process-shell-command "pactl" nil "pactl set-sink-mute 0 toggle"))
 
-
+;;(set-frame-parameter nil 'fullscreen 'fullboth)
 (exwm-input-set-key (kbd "<XF86MonBrightnessUp>") 'display/brighter)
 (exwm-input-set-key (kbd "<XF86MonBrightnessDown>") 'display/darker)
 (exwm-input-set-key (kbd "<XF86AudioRaiseVolume>") 'audio/up)
 (exwm-input-set-key (kbd "<XF86AudioLowerVolume>") 'audio/down)
 (exwm-input-set-key (kbd "<XF86AudioMute>") 'audio/mute)
+(exwm-input-set-key (kbd "<XF86Search>") 'mouse/toggle)
 
 
 
@@ -490,4 +529,4 @@ With argument ARG, do this that many times."
   (delete-region (point) (progn (backward-word arg) (point))))
 (global-set-key (kbd "<M-backspace>") 'delete-word)
 
-(setq exwm-workspace-show-all-buffers t)
+;; ;;(set-face-attribute 'default nil :family "dejavu sans mono" :height 110)
