@@ -1,4 +1,7 @@
 (require 'tramp)
+;;(setq mouse-autoselect-window t
+;;      focus-follows-mouse t)
+
 (setq tramp-default-method "ssh")
 (put 'temporary-file-directory 'standard-value '((file-name-as-directory "/tmp")))
 (setenv "PATH" (concat (getenv "PATH") ":/usr/lib/dart/bin"))
@@ -24,7 +27,7 @@
   (forward-line)
   (search-forward-regexp "^[ \t]*\n")
   (forward-line -1))
-(set-face-attribute 'default nil :family "terminus" :height 130 :weight 'normal)
+(set-face-attribute 'default nil :family "terminus" :height 130 :weight 'bold)
 (set-face-background 'hl-line "#dadada")
 (define-key global-map (kbd "M-p") 'previous-blank-line)
 (define-key global-map (kbd "M-n") 'next-blank-line)
@@ -47,7 +50,14 @@
 (global-set-key [(control ?=)] 'text-scale-increase)
 (global-set-key [(control ?-)] 'text-scale-decrease)
 (global-set-key [(control ?_)] 'text-scale-decrease)
-(global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
+
+(global-set-key (kbd "s-C-]") 'shrink-window-horizontally)
+(global-set-key (kbd "s-ESC") 'enlarge-window-horizontally)
+(global-set-key (kbd "s-C-{") 'shrink-window)
+(global-set-key (kbd "s-C-}") 'enlarge-window)
+;;(global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
+
+(global-set-key (kbd "C-0") (lambda () (interactive) (other-frame)))
 
 (load-library "view")
 (require 'cc-mode)
@@ -266,16 +276,17 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(js-indent-level 2)
  '(package-selected-packages
    (quote
-    (exwm-surf exwm eglot lsp-mode dart-mode elixir-mode go-mode multiple-cursors))))
+    (prettier-js rjsx-mode web-mode company-go projectile ido-vertical-mode neotree godoctor ascii exwm-surf exwm eglot lsp-mode dart-mode elixir-mode go-mode multiple-cursors)))
+ '(require-final-newline nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
 
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -301,6 +312,7 @@ There are two things you can do about this warning:
 (defun my-go-mode-hook ()
   ; (setq gofmt-command "goimports")
   ; Call Gofmt before saving
+  (setq gofmt-command "goimports")
   (add-hook 'before-save-hook 'gofmt-before-save)
   ; Customize compile command to run go build
   (if (not (string-match "go" compile-command))
@@ -373,7 +385,7 @@ There are two things you can do about this warning:
            (string-match "\\`\\(.*\\)\\( - [^-]*\\)\\'" title))
       (concat class ": " (match-string 1 title)))
      ((member class '("Telegram" "TelegramDesktop"))
-      (if (equal title "") "Telegram" title))
+      (if (equal title "") "Telegram"e title))
      ((equal class "skypeforlinux") "Skype")
      (t (concat class ": " title)))))
 
@@ -384,12 +396,11 @@ There are two things you can do about this warning:
     elmord/exwm-buffer-name-limit
     nil  ; start
     nil  ; padding
-    "...")
+    "…")
     ))
 
 (add-hook 'exwm-update-class-hook 'elmord/exwm-update-buffer-name)
 (add-hook 'exwm-update-title-hook 'elmord/exwm-update-buffer-name)
-
 
 (setq exwm-input-simulation-keys
       '(
@@ -404,7 +415,11 @@ There are two things you can do about this warning:
         ([?\C-e] . [end])
         ([?\M-v] . [prior])
         ([?\C-v] . [next])
+        ([?\C-h] . [backspace])
         ([?\C-d] . [delete])
+        ([?\C-.] . [?\C-w])
+        ([?\C-}] . [C-tab])
+        ([?\C-{] . [C-S-tab])
         ([?\C-k] . [S-end delete])
 
         ;; cut/paste.
@@ -414,18 +429,20 @@ There are two things you can do about this warning:
         ([?\C-g] . [escape])
 
         ;; always open new window on c-t, ignore the transpose thing
-        ([?\C-t] . [?\C-n])
+        ;; ([?\C-t] . [?\C-n])
         ;; search
         ([?\C-s] . [?\C-f])))
 
 (add-hook
  'exwm-manage-finish-hook
  (defun init-exwm/set-xterm-simulation-keys ()
-   (when (and exwm-class-name (string= exwm-class-name "XTerm"))
+   (when (or
+          (and exwm-class-name (string= exwm-class-name "XTerm"))
+          (and exwm-class-name (string= exwm-class-name "URxvt")))
      (exwm-input-set-local-simulation-keys
       '(([?\M-w] . [?\C-,])
         ([?\C-y] . [?\C-.])
-
+        ([?\C-h] . [backspace])
         ([?\C-p] . [up])
         ([?\C-n] . [down])
         ([?\C-a] . [home])
@@ -433,8 +450,9 @@ There are two things you can do about this warning:
         ([?\M-v] . [S-prior])
         ([?\C-v] . [S-next])
 
-        ([?\C-c] . [?\C-c]))))))
-
+        ([?\C-c] . [?\C-c]))))
+   ))
+ 
 
 (exwm-input-set-key (kbd "s-d") 'rename-buffer)
 (exwm-input-set-key (kbd "s-D") 'exwm-reset)
@@ -449,34 +467,30 @@ There are two things you can do about this warning:
 (define-key exwm-mode-map (kbd "C-c C-c")
 (lambda () (interactive) (exwm-input--fake-key ?\C-c)))
 
-(setq exwm-input-global-keys
+(setq exwm-input-global-keys 
       `(
-
         ([?\s-d] . exwm-reset)
         ([?\s-m] . exwm-workspace-move-window)
-        ([?\s-o] . other-windoe)
+        ([?\s-o] . other-window)
         ([?\s-w] . exwm-workspace-switch)
         ,@(mapcar (lambda (i)
                     `(,(kbd (format "s-%d" i)) .
                       (lambda ()
                         (interactive)
                         (exwm-workspace-switch-create ,i))))
-                  (number-sequence 0 4))
+                  (number-sequence 0 5))
         ([?\s-r] . (lambda (command)
 		     (interactive (list (read-shell-command "$ ")))
 		     (start-process-shell-command command nil command)))
         ([s-f2] . (lambda ()
 		    (interactive)
 		    (start-process "" nil "/usr/bin/slock")))
-        ([?\s-p] . (lambda ()
-		    (interactive)
-                    (start-process-shell-command "shot" nil "/usr/bin/shot")))
-        ([?\s-P] . (lambda ()
+        ([print] . (lambda ()
 		    (interactive)
 		    (start-process "" nil "/usr/bin/shot-whole")))
         ([s-return] . (lambda ()
 		    (interactive)
-		    (start-process "" nil "/usr/bin/xterm")))))
+		    (start-process "" nil "/usr/bin/urxvt")))))
 
 
 (add-hook 'exwm-update-class-hook
@@ -512,13 +526,22 @@ There are two things you can do about this warning:
 (exwm-input-set-key (kbd "<XF86AudioLowerVolume>") 'audio/down)
 (exwm-input-set-key (kbd "<XF86AudioMute>") 'audio/mute)
 (exwm-input-set-key (kbd "<XF86Search>") 'mouse/toggle)
-
-
+(exwm-input-set-key (kbd "s-C-]") 'shrink-window-horizontally)
+(exwm-input-set-key (kbd "s-ESC") 'enlarge-window-horizontally)
+(exwm-input-set-key (kbd "s-C-{") 'shrink-window)
+(exwm-input-set-key (kbd "s-C-}") 'enlarge-window)
 
 
 (exwm-enable)
 (exwm-config-ido)
 (exwm-config-misc)
+(require 'exwm-randr)
+(setq exwm-randr-workspace-output-plist '(0 "eDP1" 1 "eDP1" 2 "eDP1" 3 "eDP1" 4 "eDP1" 5 "DP1"))
+(add-hook 'exwm-randr-screen-change-hook
+          (lambda ()
+            (start-process-shell-command
+             "xrandr" nil "xrandr --output DP1 --right-of eDP1 --mode 2560x1440")))
+
 (setq use-dialog-box nil)
 
 ;; dont put in m-backspace in kill ring
@@ -529,4 +552,46 @@ With argument ARG, do this that many times."
   (delete-region (point) (progn (backward-word arg) (point))))
 (global-set-key (kbd "<M-backspace>") 'delete-word)
 
-;; ;;(set-face-attribute 'default nil :family "dejavu sans mono" :height 110)
+(set-face-attribute 'default nil :family "dejavu sans mono" :height 120 :weight 'normal)
+(require 'elixir-mode)
+(add-to-list 'elixir-mode-hook
+             (defun auto-activate-ruby-end-mode-for-elixir-mode ()
+               (set (make-variable-buffer-local 'ruby-end-expand-keywords-before-re)
+                    "\\(?:^\\|\\s-+\\)\\(?:do\\)")
+               (set (make-variable-buffer-local 'ruby-end-check-statement-modifiers) nil)
+               (ruby-end-mode +1)))
+(add-hook 'elixir-mode-hook
+          (lambda () (add-hook 'before-save-hook 'elixir-format nil t)))
+(require 'godoctor)
+(setq ido-enable-flex-matching t)
+(setq mode-require-final-newline nil)
+(setq require-final-newline nil)
+(put 'upcase-region 'disabled nil)
+
+(global-set-key (kbd "C-.")
+                (lambda () (interactive "")
+                  (switch-to-buffer (other-buffer (current-buffer) t))))
+
+(require 's)
+;;(require 'company)
+(add-to-list 'load-path "~/.emacs.d/alchemist.el/")
+(require 'alchemist)
+;;(require 'company-go)
+
+(add-hook 'elixir-mode-hook
+      (lambda ()
+        (company-mode)))
+
+(global-company-mode 0)
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+
+;;(define-key global-map (kbd "s-g") 'projetile-grep)
+
+(add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'rjsx-mode-hook 'prettier-js-mode)
+(exwm-randr-enable)
+;;(add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+;;(package-require 'tern)
+;;(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
