@@ -77,28 +77,25 @@ static uint8_t saved_code;
 
 bool swap(uint8_t mod, uint8_t from, uint8_t to, bool pressed) {
   if (pressed) {
-    if (get_mods() == mod) {
+    uint8_t current_mods = get_mods();
+    saved_mod = current_mods;
+    if (get_mods() & mod) {
       del_mods(mod);
-      send_keyboard_report();
-      saved_mod = mod;
       saved_code = to;
     } else {
-      saved_mod = 0;
       saved_code = from;
     }
     register_code(saved_code);
-    send_keyboard_report();
+
   } else {
     unregister_code(saved_code);
-    send_keyboard_report();
     if (saved_mod) {
-      add_mods(saved_mod);
-      send_keyboard_report();
+      set_mods(saved_mod);
     }
-
     saved_code = 0;
     saved_mod = 0;
   }
+  send_keyboard_report();
   return false;
 }
 
@@ -112,13 +109,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case KC_P: return swap(MOD_LCTL, KC_P, KC_UP,   record->event.pressed); break;
     case KC_N: return swap(MOD_LCTL, KC_N, KC_DOWN, record->event.pressed); break;
     case KC_A: return swap(MOD_LCTL, KC_A, KC_HOME, record->event.pressed); break;
+    case KC_B: return swap(MOD_LCTL, KC_B, KC_LEFT, record->event.pressed); break;
+    case KC_F: return swap(MOD_LCTL, KC_F, KC_RIGHT,record->event.pressed); break;
     case KC_D: return swap(MOD_LCTL, KC_D, KC_DEL,  record->event.pressed); break;
     case KC_E: return swap(MOD_LCTL, KC_E, KC_END,  record->event.pressed); break;
     case KC_V: {
       uint8_t m = get_mods();
-      if (m == MOD_LALT || saved_mod == MOD_LALT) {
+      if ((m & MOD_LALT) || (saved_mod & MOD_LALT)) {
 	return swap(MOD_LALT, KC_V, KC_PGUP,  record->event.pressed);
-      } else if (m == MOD_LCTL || saved_mod == MOD_LCTL) {
+      } else if ((m & MOD_LCTL) || (saved_mod & MOD_LCTL)) {
 	return swap(MOD_LCTL, KC_V, KC_PGDN,  record->event.pressed);
       }
       break;
